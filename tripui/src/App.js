@@ -5,7 +5,7 @@ import SearchBar from './SearchBar';
 function App() {
   return (
     <div className="App">
-      <h1 style={{textAlign: 'center'}}>React Search App</h1>
+      <h1 style={{textAlign: 'center'}}>i Away</h1>
       <SearchBar />
     </div>
   );
