@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/tripui/static/css/main.e6c13ad2.css",
+    "main.js": "/tripui/static/js/main.dd9731ea.js",
+    "static/js/453.ab94835a.chunk.js": "/tripui/static/js/453.ab94835a.chunk.js",
+    "index.html": "/tripui/index.html",
+    "main.e6c13ad2.css.map": "/tripui/static/css/main.e6c13ad2.css.map",
+    "main.dd9731ea.js.map": "/tripui/static/js/main.dd9731ea.js.map",
+    "453.ab94835a.chunk.js.map": "/tripui/static/js/453.ab94835a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.dd9731ea.js"
+  ]
+}
