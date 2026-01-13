@@ -21,12 +21,23 @@ const SearchBar = () => {
 
     try {
       // POST request to your FastAPI backend
-      const response = await fetch('http://localhost:8000/search', {
+      const response = await fetch('http://localhost:8000/bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: term }),
+        body: JSON.stringify({
+  "origin": "JFK",
+  "destination": "LHR",
+  "date": "2025-12-25",
+  "passenger": {
+    "first_name": "Ajai",
+    "last_name": "Varghese",
+    "email": "Ajai@example.com"
+  },
+  "seat_class": "business"
+}
+),
       });
 
       if (!response.ok) {

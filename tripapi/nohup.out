@@ -1,0 +1,7 @@
+INFO:     Will watch for changes in these directories: ['/workspaces/tripui/tripapi']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [52661] using StatReload
+INFO:     Started server process [52675]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     47.16.189.197:0 - "GET / HTTP/1.1" 200 OK
