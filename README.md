@@ -3,6 +3,7 @@ Trip User Interface
 
 ### UI
 
+npm install # after codespace is deleted
 npm start
 
 ### Fast API 
