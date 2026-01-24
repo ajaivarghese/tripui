@@ -1,38 +1,320 @@
-.App {
-  text-align: center;
+/* --- Global & Reset --- */
+body {
+  font-family: sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* --- Search Styles --- */
+.search-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  background-color: #ffffff;
+  /* If showing results, we might want to hide or adjust this, 
+     but for this app we swap views entirely */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.search-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.input-group {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 15px 50px 15px 25px;
+  font-size: 16px;
+  color: #4a5568;
+  background-color: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 50px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.search-input:focus {
+  background-color: #ffffff;
+  border-color: #cbd5e0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.clear-btn {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #a0aec0;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  z-index: 10;
+}
+
+.clear-btn:hover {
+  color: #4a5568;
+}
+
+.dropdown-arrow {
+  pointer-events: none;
+}
+
+.submit-btn {
+  width: 50%;
+  padding: 12px 0;
+  background-color: #718096;
   color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
-.App-link {
-  color: #61dafb;
+.submit-btn:hover {
+  background-color: #4a5568;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+.submit-btn:disabled {
+  background-color: #cbd5e0;
+  cursor: not-allowed;
+}
+
+.split-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.input-label {
+  position: absolute;
+  font-size: 10px;
+  top: 4px;
+  left: 25px;
+  color: #a0aec0;
+}
+
+.number-input {
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+/* --- Results List Styles --- */
+.results-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.results-container {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.flight-card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.flight-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+.card-header:hover {
+  background-color: #f7fafc;
+}
+
+.route-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.airline-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #718096;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-range {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2d3748;
+}
+
+.day-offset {
+  font-size: 12px;
+  color: #a0aec0;
+}
+
+.duration-stops {
+  font-size: 12px;
+  color: #a0aec0;
+}
+
+.price-action {
+  text-align: right;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: bold;
+  color: #4a5568;
+  display: block;
+}
+
+.expand-icon {
+  font-size: 14px;
+  color: #a0aec0;
+  margin-top: 5px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.flight-card.active .expand-icon {
+  transform: rotate(180deg);
+}
+
+.card-details {
+  padding: 0 25px 25px 25px;
+  background-color: #fcfcfc;
+  border-top: 1px solid #edf2f7;
+}
+
+/* Timeline Styles */
+.segment {
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px dashed #cbd5e0;
+  margin-left: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.segment.last-segment {
+  border-left: none;
+  padding-bottom: 0;
+}
+
+.dot {
+  position: absolute;
+  left: -7px;
+  top: 24px;
+  width: 12px;
+  height: 12px;
+  background-color: #718096;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #718096;
+  z-index: 2;
+}
+
+.end-dot {
+  top: auto;
+  bottom: 0;
+}
+
+.segment-detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.seg-time {
+  font-weight: bold;
+  color: #2d3748;
+}
+
+.seg-code {
+  font-weight: bold;
+  color: #4a5568;
+}
+
+.seg-meta {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 5px;
+}
+
+.layover-badge {
+  position: relative;
+  background-color: #edf2f7;
+  color: #4a5568;
+  padding: 5px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  width: fit-content;
+  margin: 0 0 0 20px;
+  z-index: 1;
+}
+
+.book-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background-color: #718096;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-btn:hover {
+  background-color: #4a5568;
+}
+
+.back-btn {
+  margin-bottom: 20px;
+  background: none;
+  border: none;
+  color: #718096;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.back-btn:hover {
+  text-decoration: underline;
 }

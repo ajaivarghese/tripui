@@ -1,0 +1,139 @@
+/* --- PREVIOUS SEARCH STYLES (Kept for context) --- */
+.search-container {
+  display: flex;
+  flex-direction: column; /* Changed to column to stack search and results */
+  align-items: center;
+  padding: 40px 20px;
+  background-color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.search-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 40px; /* Spacing between form and results */
+}
+
+/* ... (Include the rest of the search input styles here) ... */
+
+/* --- NEW FLIGHT RESULT STYLES (Matching Cadet Blue Theme) --- */
+
+.flight-card {
+  width: 100%;
+  max-width: 600px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px; /* Slightly less curved than buttons for card content */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+  color: #4a5568;
+}
+
+.flight-header {
+  background-color: #5F9EA0; /* Cadet Blue */
+  color: white;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flight-price {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.flight-route-summary {
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.flight-body {
+  padding: 20px 25px;
+  background-color: #f7fafc;
+}
+
+.segment-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+/* Vertical line connecting segments */
+.segment-row:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 35px;
+  bottom: -25px;
+  width: 2px;
+  background-color: #cbd5e0;
+}
+
+.time-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 80px;
+  text-align: right;
+}
+
+.time {
+  font-weight: 700;
+  color: #2d3748;
+  font-size: 16px;
+}
+
+.date {
+  font-size: 12px;
+  color: #718096;
+}
+
+.segment-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.airport-code {
+  font-weight: 700;
+  color: #5F9EA0; /* Cadet Blue Text */
+  font-size: 18px;
+}
+
+.airline-info {
+  font-size: 13px;
+  color: #718096;
+  margin-top: 4px;
+}
+
+.duration-info {
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #e2e8f0;
+  color: #4a5568;
+  padding: 4px 10px;
+  border-radius: 50px;
+  display: inline-block;
+  align-self: flex-start;
+  margin-bottom: 5px;
+}
+
+.layover-badge {
+  margin: 10px 0 10px 95px; /* Indent to align with content */
+  font-size: 12px;
+  color: #e53e3e; /* Red/Orange for attention, or use Cadet Blue */
+  font-weight: 600;
+  background-color: #fff5f5;
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  border: 1px dashed #feb2b2;
+}

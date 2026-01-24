@@ -7,9 +7,9 @@
 
 .search-form {
   display: flex;
-  flex-direction: column; /* Stacks items vertically */
-  align-items: center;    /* Centers items horizontally */
-  gap: 20px;              /* Space between input and submit button */
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
   width: 100%;
   max-width: 500px;
 }
@@ -21,21 +21,22 @@
 
 .search-input {
   width: 100%;
-  padding: 15px 50px 15px 25px; /* Extra right padding for the clear button */
+  padding: 15px 50px 15px 25px;
   font-size: 16px;
   color: #4a5568; 
   background-color: #f7fafc; 
   border: 1px solid #e2e8f0;
-  border-radius: 50px; /* Curved edges */
+  border-radius: 50px;
   outline: none;
-  box-sizing: border-box; /* Ensures padding doesn't expand width */
+  box-sizing: border-box;
   transition: all 0.2s ease;
 }
 
 .search-input:focus {
   background-color: #ffffff;
-  border-color: #cbd5e0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  /* CHANGED: Set border to Cadet Blue on focus for consistent theming */
+  border-color: #5F9EA0; 
+  box-shadow: 0 4px 6px -1px rgba(95, 158, 160, 0.2); /* Optional: Shadow matching the blue */
 }
 
 .clear-btn {
@@ -60,12 +61,13 @@
 }
 
 .submit-btn {
-  width: 50%; /* Button is half the width of the form */
+  width: 50%;
   padding: 12px 0;
-  background-color: #718096; /* Muted Blue/Gray */
+  /* CHANGED: Cadet Blue Hex Code */
+  background-color: #5F9EA0; 
   color: white;
   border: none;
-  border-radius: 50px; /* Curved edges */
+  border-radius: 50px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -73,7 +75,8 @@
 }
 
 .submit-btn:hover {
-  background-color: #4a5568;
+  /* CHANGED: A slightly darker shade of Cadet Blue for hover effect */
+  background-color: #4a8284; 
 }
 
 .submit-btn:active {

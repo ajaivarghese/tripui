@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import FlightResult from './FlightResult'; // Import the new component
 import './SearchBar.css';
 
 const SearchBar = () => {
   const [term, setTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [flightData, setFlightData] = useState(null); // State to store results
 
   const handleInputChange = (event) => {
     setTerm(event.target.value);
@@ -11,6 +13,7 @@ const SearchBar = () => {
 
   const handleClear = () => {
     setTerm('');
+    setFlightData(null); // Hide results when search is cleared
   };
 
   const onFormSubmit = async (event) => {
@@ -18,6 +21,7 @@ const SearchBar = () => {
     if (!term) return;
 
     setIsLoading(true);
+    setFlightData(null); // Reset previous results before new search
 
     try {
       // POST request to your FastAPI backend
@@ -26,18 +30,19 @@ const SearchBar = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        // Note: You are currently sending hardcoded data. 
+        // Ideally, you should use 'term' to set the destination dynamically.
         body: JSON.stringify({
-  "origin": "JFK",
-  "destination": "LHR",
-  "date": "2025-12-25",
-  "passenger": {
-    "first_name": "Ajai",
-    "last_name": "Varghese",
-    "email": "Ajai@example.com"
-  },
-  "seat_class": "business"
-}
-),
+          "origin": "JFK",
+          "destination": "LHR", 
+          "date": "2025-12-25",
+          "passenger": {
+            "first_name": "Ajai",
+            "last_name": "Varghese",
+            "email": "Ajai@example.com"
+          },
+          "seat_class": "business"
+        }),
       });
 
       if (!response.ok) {
@@ -47,8 +52,12 @@ const SearchBar = () => {
       const data = await response.json();
       console.log('FastAPI Response:', data);
       
+      // THIS IS THE TRIGGER: Saving data to state shows the result
+      setFlightData(data); 
+      
     } catch (error) {
       console.error('Error submitting search:', error);
+      alert("Failed to fetch flights. Please check the backend.");
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +78,6 @@ const SearchBar = () => {
             disabled={isLoading}
           />
           
-          {/* Clear button appears only when there is text */}
           {term && (
             <button 
               type="button" 
@@ -88,6 +96,11 @@ const SearchBar = () => {
         </button>
         
       </form>
+
+      {/* --- FLIGHT RESULTS SECTION --- */}
+      {/* This component only renders when flightData is not null */}
+      {flightData && <FlightResult data={flightData} />}
+      
     </div>
   );
 };
