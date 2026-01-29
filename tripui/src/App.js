@@ -1,325 +1,517 @@
-import React, { useState } from "react";
-import "./App.css";
+import React, { useState } from 'react';
+import './App.css';
 
-// --- SUB-COMPONENT: Search Form ---
-const FlightSearch = ({ onSearch, isLoading }) => {
-  const [formData, setFormData] = useState({
-    departure: "",
-    arrival: "",
-    departureDate: "",
-    returnDate: "",
-    adults: 1,
-    children: 0,
-    travelClass: "economy",
-    promoCode: "",
-  });
+// --- MOCK API SERVICE ---
+// Simulates the backend interactions described in your requirements
+const mockBackend = {
+  // 1. Initial Trip Search
+  fetchTrips: async () => {
+    return new Promise((resolve) => setTimeout(() => {
+      resolve([
+        { 
+          id: 101, 
+          title: "The London & Countryside Escape", 
+          route: "✈️ JFK ➝ LHR", 
+          stops: "2 Stops", 
+          duration: "3 Days", 
+          hotel: "5★ Hotel", 
+          flight: "Business Class", 
+          price: "$2,450" 
+        },
+        { 
+          id: 102, 
+          title: "Parisian Weekend Getaway", 
+          route: "✈️ JFK ➝ CDG", 
+          stops: "Non-stop", 
+          duration: "2 Days", 
+          hotel: "Boutique Stay", 
+          flight: "Economy", 
+          price: "$1,100" 
+        },
+        { 
+          id: 103, 
+          title: "Tokyo Cultural Immersion", 
+          route: "✈️ JFK ➝ HND", 
+          stops: "1 Stop", 
+          duration: "5 Days", 
+          hotel: "Ryokan", 
+          flight: "Premium Econ", 
+          price: "$3,200" 
+        }
+      ]);
+    }, 800));
+  },
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  // 2. Fetch Specific Itinerary
+  fetchItinerary: async (tripId) => {
+    return new Promise((resolve) => setTimeout(() => {
+      resolve([
+        {
+          day: "Day 1: Arrival & Exploration",
+          id: "day1",
+          events: [
+            { time: "08:00 AM", icon: "✈️", title: "Flight Departure", desc: "Origin: JFK - New York<br>Destination: LHR - London Heathrow" },
+            { time: "04:00 PM", icon: "🚖", title: "Transfer to Hotel", desc: "Pickup from Terminal 5 to City Center Hotel." },
+            { time: "05:30 PM", icon: "📸", title: "City Tour (3 Stops)", isList: true, items: ["Walk through the Royal Botanical Gardens", "Photo op at the Palace Gates", "Evening tea at the Historic Square"] },
+            { time: "08:00 PM", icon: "🏨", title: "Check-in & Rest", desc: "Back to <em>The Grand Plaza Hotel</em> for the night." }
+          ]
+        },
+        {
+          day: "Day 2: Countryside & Return",
+          id: "day2",
+          events: [
+            { time: "09:00 AM", icon: "🚖", title: "Taxi to Countryside", desc: "Drive to the Wine Region (approx. 2 hours)." },
+            { time: "12:00 PM", icon: "🍇", title: "Local Experience", isList: true, items: ["Vineyard tour and tasting", "Lunch at a rustic farmhouse", "Visit the ancient village church"] },
+            { time: "09:30 PM", icon: "✈️", title: "Flight Home", desc: "Origin: LHR - London Heathrow<br>Destination: JFK - New York" }
+          ]
+        }
+      ]);
+    }, 800));
+  },
 
-  const clearField = (field) => {
-    setFormData((prev) => ({ ...prev, [field]: "" }));
-  };
+  // 3. Initiate Booking (POST to backend)
+  initiateBooking: async (tripId) => {
+    console.log(`POST to https://travelapi.myvpn.com/trips/${tripId}/book`);
+    return new Promise((resolve) => setTimeout(() => {
+      resolve({ success: true, message: "Booking Initialized" });
+    }, 600));
+  },
+  
+  // 4. Search Specific Flights (POST to https://travelapi.myvnc.com/flights/search)
+  searchFlights: async (searchParams) => {
+    console.log("POST https://travelapi.myvnc.com/flights/search", searchParams);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // JSON structure matching list_multi_flights.html
+        resolve([
+          {
+            id: "f1",
+            airline: "Etihad Airways",
+            code: "EY",
+            price: "$416.50",
+            timeRange: "21:55 - 02:35",
+            nextDay: "(+2d)",
+            duration: "18h 10m",
+            stops: "1 Stop (AUH)",
+            segments: [
+              {
+                depTime: "21:55 JFK", depLoc: "New York T4",
+                arrTime: "19:35 AUH", arrLoc: "Abu Dhabi TA",
+                meta: "Boeing 787-9 | 12h 40m",
+                layover: "1h 25m Layover in Abu Dhabi"
+              },
+              {
+                depTime: "21:00 AUH", depLoc: "Abu Dhabi TA",
+                arrTime: "02:35 COK", arrLoc: "Kochi T3",
+                meta: "Boeing 737 Max 8 | Operated by Akasa Air",
+                isLast: true
+              }
+            ]
+          },
+          {
+            id: "f2",
+            airline: "Kuwait Airways",
+            code: "KU",
+            price: "$424.00",
+            timeRange: "16:55 - 00:35",
+            nextDay: "(+2d)",
+            duration: "21h 10m",
+            stops: "1 Stop (KWI)",
+            segments: [
+              {
+                depTime: "16:55 JFK", depLoc: "New York T7",
+                arrTime: "13:05 KWI", arrLoc: "Kuwait T4",
+                meta: "Boeing 777-300ER | 12h 10m",
+                layover: "3h 55m Layover in Kuwait"
+              },
+              {
+                depTime: "17:00 KWI", depLoc: "Kuwait T4",
+                arrTime: "00:35 COK", arrLoc: "Kochi T3",
+                meta: "Airbus A320neo | 5h 05m",
+                isLast: true
+              }
+            ]
+          },
+          {
+            id: "f3",
+            airline: "Air India",
+            code: "AI",
+            price: "$468.20",
+            timeRange: "12:35 - 19:15",
+            nextDay: "(+1d)",
+            duration: "20h 10m",
+            stops: "1 Stop (BOM)",
+            segments: [
+              {
+                depTime: "12:35 JFK", depLoc: "New York T4",
+                arrTime: "13:35 BOM", arrLoc: "Mumbai T2",
+                meta: "Boeing 777-300ER | 14h 30m",
+                layover: "3h 45m Layover in Mumbai"
+              },
+              {
+                depTime: "17:20 BOM", depLoc: "Mumbai T2",
+                arrTime: "19:15 COK", arrLoc: "Kochi T1",
+                meta: "Airbus A321 | 1h 55m",
+                isLast: true
+              }
+            ]
+          }
+        ]);
+      }, 1500); // Simulated network delay
+    });
+  }
+};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSearch(formData);
-  };
-
+// --- COMPONENT 1: SearchBasic ---
+// The starting point of the app
+const SearchBasic = ({ onSearch }) => {
   return (
-    <div class="search-container">
-      <form class="search-form" onSubmit={handleSubmit}>
-        <datalist id="airport-list">
-          <option value="JFK - New York John F. Kennedy" />
-          <option value="LHR - London Heathrow" />
-          <option value="DXB - Dubai International" />
-          <option value="SIN - Singapore Changi" />
-          <option value="HND - Tokyo Haneda" />
-          <option value="CDG - Paris Charles de Gaulle" />
-          <option value="AMS - Amsterdam Schiphol" />
-          <option value="FRA - Frankfurt Airport" />
-          <option value="SYD - Sydney Kingsford Smith" />
-          <option value="DEL - Indira Gandhi International" />
-        </datalist>
-
-        {/* Departure */}
-        <div class="input-group">
-          <input
-            type="text"
-            list="airport-list"
-            name="departure"
-            class="search-input"
-            placeholder="Departure Airport (Type to search)"
-            value={formData.departure}
-            onChange={handleChange}
-            required
-          />
-          {formData.departure && (
-            <button type="button" class="clear-btn" onClick={() => clearField("departure")}>
-              ×
-            </button>
-          )}
-        </div>
-
-        {/* Arrival */}
-        <div class="input-group">
-          <input
-            type="text"
-            list="airport-list"
-            name="arrival"
-            class="search-input"
-            placeholder="Arrival Airport (Type to search)"
-            value={formData.arrival}
-            onChange={handleChange}
-            required
-          />
-          {formData.arrival && (
-            <button type="button" class="clear-btn" onClick={() => clearField("arrival")}>
-              ×
-            </button>
-          )}
-        </div>
-
-        {/* Dates */}
-        <div class="split-row">
-          <div class="input-group">
-            <input
-              type="text"
-              name="departureDate"
-              class="search-input"
-              placeholder="Departure Date"
-              onFocus={(e) => (e.target.type = "date")}
-              onBlur={(e) => (e.target.type = "text")}
-              value={formData.departureDate}
-              onChange={handleChange}
-            />
+    <div className="container">
+      <h1>Find Your Trip</h1>
+      <div className="search-container">
+        <form className="search-form" onSubmit={(e) => { e.preventDefault(); onSearch(); }}>
+          <div className="input-group">
+            <input type="text" className="search-input" placeholder="Search destination (e.g. London)" required />
+            <button type="button" className="clear-btn" onClick={(e) => e.target.previousElementSibling.value=''}>×</button>
           </div>
-          <div class="input-group">
-            <input
-              type="text"
-              name="returnDate"
-              class="search-input"
-              placeholder="Return Date"
-              onFocus={(e) => (e.target.type = "date")}
-              onBlur={(e) => (e.target.type = "text")}
-              value={formData.returnDate}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        {/* Passengers */}
-        <div class="split-row">
-          <div class="input-group">
-            <label htmlFor="adults" class="input-label">ADULTS</label>
-            <input
-              type="number"
-              id="adults"
-              name="adults"
-              class="search-input number-input"
-              min="1"
-              value={formData.adults}
-              onChange={handleChange}
-            />
-          </div>
-          <div class="input-group">
-            <label htmlFor="children" class="input-label">CHILDREN</label>
-            <input
-              type="number"
-              id="children"
-              name="children"
-              class="search-input number-input"
-              min="0"
-              value={formData.children}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-
-        {/* Class */}
-        <div class="input-group">
-          <select
-            name="travelClass"
-            class="search-input"
-            value={formData.travelClass}
-            onChange={handleChange}
-          >
-            <option value="economy">Economy</option>
-            <option value="premium_economy">Premium Economy</option>
-            <option value="business">Business</option>
-            <option value="first">First Class</option>
-          </select>
-          <span class="clear-btn dropdown-arrow">▼</span>
-        </div>
-
-        {/* Promo */}
-        <div class="input-group">
-          <input
-            type="text"
-            name="promoCode"
-            class="search-input"
-            placeholder="Promo Code"
-            value={formData.promoCode}
-            onChange={handleChange}
-          />
-          {formData.promoCode && (
-            <button type="button" class="clear-btn" onClick={() => clearField("promoCode")}>
-              ×
-            </button>
-          )}
-        </div>
-
-        <button type="submit" class="submit-btn" disabled={isLoading}>
-          {isLoading ? "Searching..." : "Search Flights"}
-        </button>
-      </form>
+          <button type="submit" className="submit-btn">Find Trips</button>
+        </form>
+      </div>
     </div>
   );
 };
 
-// --- SUB-COMPONENT: Single Flight Card ---
-const FlightCard = ({ flight }) => {
-  const [isOpen, setIsOpen] = useState(false);
+// --- COMPONENT 2: ListItinerary ---
+// Displays the available vacation packages
+const ListItinerary = ({ results, onViewDetails, onBack }) => {
+  return (
+    <div className="container">
+      <button className="back-link" onClick={onBack}>← Back to Search</button>
+      <h1>Available Itineraries</h1>
+      
+      {results.map((trip) => (
+        <div key={trip.id} className="trip-card" onClick={() => onViewDetails(trip.id)}>
+          <div className="trip-info">
+            <span className="trip-title">{trip.title}</span>
+            <div className="trip-route">
+              <span>{trip.route}</span>
+              <span style={{color:'#cbd5e0'}}>•</span>
+              <span>{trip.stops}</span>
+            </div>
+            <div className="tag-container">
+              <span className="tag duration">{trip.duration}</span>
+              <span className="tag hotel">{trip.hotel}</span>
+              <span className="tag flight">{trip.flight}</span>
+            </div>
+          </div>
+          <div className="trip-action">
+            <span className="price">{trip.price}</span>
+            <span className="per-person">per person</span>
+            <button className="view-btn">View Details</button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// --- COMPONENT 3: ItineraryListTime ---
+// Detailed timeline view with "Proceed to Booking" button
+const ItineraryListTime = ({ itinerary, onBack, onProceed }) => {
+  const [expandedDays, setExpandedDays] = useState(['day1', 'day2']);
+
+  const toggleDay = (dayId) => {
+    setExpandedDays(prev => 
+      prev.includes(dayId) ? prev.filter(id => id !== dayId) : [...prev, dayId]
+    );
+  };
 
   return (
-    <div class={`flight-card ${isOpen ? "active" : ""}`}>
-      <div class="card-header" onClick={() => setIsOpen(!isOpen)}>
-        <div class="route-info">
-          <div class="airline-name">
-            {flight.airline} ({flight.airlineCode})
-          </div>
-          <div class="time-range">
-            {flight.timeRange}
-            {flight.dayOffset && <span class="day-offset"> ({flight.dayOffset})</span>}
-          </div>
-          <div class="duration-stops">
-            {flight.totalDuration} | {flight.stopSummary}
-          </div>
-        </div>
-        <div class="price-action">
-          <span class="price">
-            {flight.currency}{flight.price.toFixed(2)}
-          </span>
-          <span class="expand-icon">▼ Details</span>
-        </div>
+    <div className="container">
+      <button className="back-link" onClick={onBack}>← Back to List</button>
+      
+      {itinerary.map((dayData) => {
+        const isOpen = expandedDays.includes(dayData.id);
+        return (
+          <React.Fragment key={dayData.id}>
+            <div className={`day-badge ${isOpen ? 'active' : ''}`} onClick={() => toggleDay(dayData.id)}>
+              <span>{dayData.day}</span>
+              <span className="toggle-icon">▼</span>
+            </div>
+
+            <div className={`timeline-group ${isOpen ? 'show' : ''}`}>
+              {dayData.events.map((event, idx) => (
+                <div key={idx} className="timeline-item">
+                  <div className="time-col">{event.time}</div>
+                  <div className="icon-col">
+                    <div className="time-icon">{event.icon}</div>
+                    <div className="line"></div>
+                  </div>
+                  <div className="itinerary-card">
+                    <span className="card-title">{event.title}</span>
+                    <span className="card-detail">
+                      {event.isList ? 
+                        <ul className="activity-list">{event.items.map((item, i) => <li key={i}>{item}</li>)}</ul> : 
+                        <div dangerouslySetInnerHTML={{ __html: event.desc }} />
+                      }
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </React.Fragment>
+        );
+      })}
+
+      <div className="action-footer">
+        <button className="btn-proceed" onClick={onProceed}>
+          Proceed to Booking
+        </button>
       </div>
 
-      {isOpen && (
-        <div class="card-details" style={{ display: "block" }}>
-          {flight.segments.map((segment, index) => {
-            if (segment.type === "layover") {
-              return (
-                <div key={index} class="layover-badge">
-                  {segment.duration} Layover in {segment.location}
-                </div>
-              );
-            }
-
-            // Determine if this is the last segment to apply special CSS
-            // The last item in the array is usually a flight, so we check if it's the last index
-            const isLast = index === flight.segments.length - 1;
-
-            return (
-              <div key={index} class={`segment ${isLast ? "last-segment" : ""}`}>
-                <div class="dot"></div>
-                
-                {/* Departure Row */}
-                <div class="segment-detail-row">
-                  <span class="seg-time">{segment.depTime} {segment.depCode}</span>
-                  <span class="seg-code">{segment.depDesc}</span>
-                </div>
-                
-                {/* Meta info shown in the middle of the line */}
-                <div class="seg-meta">{segment.meta}</div>
-
-                {/* Arrival Row */}
-                <div class="segment-detail-row" style={{ marginTop: "15px" }}>
-                  <span class="seg-time">{segment.arrTime} {segment.arrCode}</span>
-                  <span class="seg-code">{segment.arrDesc}</span>
-                </div>
-
-                {isLast && <div class="dot end-dot"></div>}
-              </div>
-            );
-          })}
-
-          <button class="book-btn">Select Flight</button>
-        </div>
-      )}
     </div>
   );
 };
 
-// --- MAIN COMPONENT: App ---
-function App() {
-  const [view, setView] = useState("search"); // 'search' or 'results'
-  const [flights, setFlights] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleSearch = async (searchData) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch("https://travelapi.myvnc.com/flight/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(searchData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch flights");
-      }
-
-      const data = await response.json();
+// --- COMPONENT 4: FlightBooking ---
+// The form shown after clicking "Proceed to Booking"
+const FlightBooking = ({ onBack, onSearchFlights }) => {
+  return (
+    <div className="container">
+       <button className="back-link" onClick={onBack}>← Cancel Booking</button>
+       <h1>Flight Search</h1>
       
-      // Assuming api returns { flights: [...] }
-      setFlights(data.flights || []);
-      setView("results");
-    } catch (err) {
-      console.error(err);
-      setError("Unable to find flights. Please try again later.");
-      // For demo purposes, we can optionally switch to view even if empty
-      // setView("results"); 
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      <div className="search-container">
+        <form className="search-form" onSubmit={(e) => { e.preventDefault(); onSearchFlights(); }}>
+          
+          <datalist id="airport-list">
+            <option value="JFK - New York John F. Kennedy" />
+            <option value="LHR - London Heathrow" />
+            <option value="DXB - Dubai International" />
+            <option value="SIN - Singapore Changi" />
+            <option value="HND - Tokyo Haneda" />
+            <option value="CDG - Paris Charles de Gaulle" />
+            <option value="AMS - Amsterdam Schiphol" />
+            <option value="FRA - Frankfurt Airport" />
+            <option value="SYD - Sydney Kingsford Smith" />
+            <option value="DEL - Indira Gandhi International" />
+          </datalist>
 
-  const handleBack = () => {
-    setView("search");
-    setFlights([]);
-    setError(null);
+          <div className="input-group">
+            <input type="text" list="airport-list" className="search-input" placeholder="Departure Airport (Type to search)" required />
+            <button type="button" className="clear-btn" onClick={(e) => e.target.previousElementSibling.value=''}>×</button>
+          </div>
+
+          <div className="input-group">
+            <input type="text" list="airport-list" className="search-input" placeholder="Arrival Airport (Type to search)" required />
+            <button type="button" className="clear-btn" onClick={(e) => e.target.previousElementSibling.value=''}>×</button>
+          </div>
+
+          <div className="split-row">
+            <div className="input-group">
+              <input type="text" className="search-input" placeholder="Departure Date" onFocus={(e) => e.target.type='date'} onBlur={(e) => e.target.type='text'} />
+            </div>
+            <div className="input-group">
+              <input type="text" className="search-input" placeholder="Return Date" onFocus={(e) => e.target.type='date'} onBlur={(e) => e.target.type='text'} />
+            </div>
+          </div>
+
+          <div className="split-row">
+            <div className="input-group">
+              <label className="floating-label">ADULTS</label>
+              <input type="number" className="search-input" defaultValue="1" min="1" />
+            </div>
+            <div className="input-group">
+              <label className="floating-label">CHILDREN</label>
+              <input type="number" className="search-input" defaultValue="0" min="0" />
+            </div>
+          </div>
+
+          <div className="input-group">
+            <select className="search-input">
+              <option value="economy">Economy</option>
+              <option value="premium_economy">Premium Economy</option>
+              <option value="business">Business</option>
+              <option value="first">First Class</option>
+            </select>
+            <span className="clear-btn" style={{pointerEvents: 'none'}}>▼</span>
+          </div>
+
+          <div className="input-group">
+            <input type="text" className="search-input" placeholder="Promo Code" />
+            <button type="button" className="clear-btn" onClick={(e) => e.target.previousElementSibling.value=''}>×</button>
+          </div>
+
+          <button type="submit" className="submit-btn">Search Flights</button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// --- COMPONENT 5: FlightResults ---
+// Displays results after searching flights in booking view
+const FlightResults = ({ flights, onBack }) => {
+  const [activeCardId, setActiveCardId] = useState(null);
+
+  const toggleCard = (id) => {
+    setActiveCardId(activeCardId === id ? null : id);
   };
 
   return (
-    <div className="App">
-      {view === "search" && (
-        <>
-          <FlightSearch onSearch={handleSearch} isLoading={isLoading} />
-          {error && <div style={{textAlign: "center", color: "red"}}>{error}</div>}
-        </>
+    <div className="container">
+      <button className="back-link" onClick={onBack}>← Back to Search</button>
+      <h1>Flight Search Results</h1>
+      
+      <div className="results-container">
+        {flights.map((flight) => (
+          <div 
+            key={flight.id} 
+            className={`flight-card ${activeCardId === flight.id ? 'active' : ''}`}
+            onClick={() => toggleCard(flight.id)}
+          >
+            {/* Header */}
+            <div className="card-header">
+              <div className="route-info">
+                <div className="airline-name">{flight.airline} ({flight.code})</div>
+                <div className="time-range">{flight.timeRange} <span style={{fontSize:'12px', color:'#a0aec0'}}>{flight.nextDay}</span></div>
+                <div className="duration-stops">{flight.duration} | {flight.stops}</div>
+              </div>
+              <div className="price-action">
+                <span className="price">{flight.price}</span>
+                <span className="expand-icon">▼ Details</span>
+              </div>
+            </div>
+
+            {/* Expanded Details */}
+            <div className="card-details" onClick={(e) => e.stopPropagation()}>
+              {flight.segments.map((seg, index) => (
+                <React.Fragment key={index}>
+                  <div className={`segment ${seg.isLast ? 'last-segment' : ''}`}>
+                    <div className="dot"></div>
+                    <div className="segment-detail-row">
+                      <span className="seg-time">{seg.depTime}</span>
+                      <span className="seg-code">{seg.depLoc}</span>
+                    </div>
+                    <div className="seg-meta">{seg.meta}</div>
+                    
+                    <div className="segment-detail-row" style={{marginTop:'15px'}}>
+                      <span className="seg-time">{seg.arrTime}</span>
+                      <span className="seg-code">{seg.arrLoc}</span>
+                    </div>
+                    {seg.isLast && <div className="dot end-dot"></div>}
+                  </div>
+                  
+                  {/* Layover Badge */}
+                  {seg.layover && (
+                    <div className="layover-badge">{seg.layover}</div>
+                  )}
+                </React.Fragment>
+              ))}
+
+              <button className="book-btn" onClick={() => alert("Flight Selected! Proceeding to Payment...")}>Select Flight</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// --- MAIN CONTROLLER ---
+function App() {
+  // Views: 'search' | 'list' | 'details' | 'booking' | 'flightResults'
+  const [view, setView] = useState('search'); 
+  const [loading, setLoading] = useState(false);
+  
+  // Data Store
+  const [tripResults, setTripResults] = useState([]);
+  const [selectedItinerary, setSelectedItinerary] = useState([]);
+  const [flightResults, setFlightResults] = useState([]);
+
+  // 1. Home -> List
+  const handleSearch = async () => {
+    setLoading(true);
+    const data = await mockBackend.fetchTrips();
+    setTripResults(data);
+    setView('list');
+    setLoading(false);
+  };
+
+  // 2. List -> Details
+  const handleViewDetails = async (tripId) => {
+    setLoading(true);
+    const data = await mockBackend.fetchItinerary(tripId);
+    setSelectedItinerary(data);
+    setView('details');
+    setLoading(false);
+  };
+
+  // 3. Details -> Booking Form
+  const handleProceedToBooking = async () => {
+    setLoading(true);
+    // Logic: Perhaps lock the trip ID here
+    await mockBackend.initiateBooking(101);
+    setView('booking');
+    setLoading(false);
+  };
+
+  // 4. Booking Form -> Flight Results
+  const handleFlightSearch = async () => {
+    setLoading(true);
+    const data = await mockBackend.searchFlights({ from: 'JFK', to: 'COK' });
+    setFlightResults(data);
+    setView('flightResults');
+    setLoading(false);
+  };
+
+  return (
+    <div className="app-wrapper">
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="container" style={{justifyContent:'center', height:'80vh'}}>
+          <div className="spinner" style={{
+            width:'40px', height:'40px', 
+            border:'4px solid #f3f3f3', borderTop:'4px solid #718096', 
+            borderRadius:'50%', animation:'spin 1s linear infinite'
+          }}></div>
+          <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+      
+      {/* View Routing */}
+      {!loading && view === 'search' && (
+        <SearchBasic onSearch={handleSearch} />
+      )}
+      
+      {!loading && view === 'list' && (
+        <ListItinerary 
+          results={tripResults} 
+          onViewDetails={handleViewDetails}
+          onBack={() => setView('search')}
+        />
       )}
 
-      {view === "results" && (
-        <div class="results-wrapper">
-          <div class="results-container">
-            <button class="back-btn" onClick={handleBack}>← Back to Search</button>
-            
-            {flights.length === 0 ? (
-              <div style={{textAlign:"center", padding: "20px"}}>No flights found.</div>
-            ) : (
-              flights.map((flight) => (
-                <FlightCard key={flight.id} flight={flight} />
-              ))
-            )}
-          </div>
-        </div>
+      {!loading && view === 'details' && (
+        <ItineraryListTime 
+          itinerary={selectedItinerary} 
+          onBack={() => setView('list')}
+          onProceed={handleProceedToBooking}
+        />
+      )}
+
+      {!loading && view === 'booking' && (
+        <FlightBooking 
+          onBack={() => setView('details')}
+          onSearchFlights={handleFlightSearch}
+        />
+      )}
+
+      {!loading && view === 'flightResults' && (
+        <FlightResults 
+          flights={flightResults} 
+          onBack={() => setView('booking')}
+        />
       )}
     </div>
   );

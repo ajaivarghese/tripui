@@ -6,6 +6,15 @@ Trip User Interface
 npm install # after codespace is deleted
 npm start
 
+cd /workspaces/tripui/tripui
+cat <<EOF > .env
+VITE_API_URL=https://travelapi.myvnc.com
+EOF
+npm run build
+npm start
+
+uvicorn main:app --host 0.0.0.0 --port 8000
+
 ### Fast API 
 
 /bookings

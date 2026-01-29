@@ -1,18 +1,39 @@
-/* --- Global & Reset --- */
+/* --- GLOBAL DEFAULTS --- */
 body {
   font-family: sans-serif;
   background-color: #f0f2f5;
   margin: 0;
+  color: #4a5568;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* --- Search Styles --- */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+h1 {
+  color: #2d3748;
+  margin-bottom: 30px;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* --- SHARED FORM STYLES (Used by Search & FlightBooking) --- */
 .search-container {
   display: flex;
   justify-content: center;
   padding: 40px 20px;
   background-color: #ffffff;
-  /* If showing results, we might want to hide or adjust this, 
-     but for this app we swap views entirely */
+  border-radius: 20px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 500px;
 }
 
 .search-form {
@@ -21,7 +42,6 @@ body {
   align-items: center;
   gap: 20px;
   width: 100%;
-  max-width: 500px;
 }
 
 .input-group {
@@ -31,24 +51,43 @@ body {
 
 .search-input {
   width: 100%;
-  padding: 15px 50px 15px 25px;
+  padding: 15px 50px 15px 25px; 
   font-size: 16px;
-  color: #4a5568;
-  background-color: #f7fafc;
+  color: #4a5568; 
+  background-color: #f7fafc; 
   border: 1px solid #e2e8f0;
-  border-radius: 50px;
+  border-radius: 50px; 
   outline: none;
-  box-sizing: border-box;
+  box-sizing: border-box; 
   transition: all 0.2s ease;
   -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
 }
 
 .search-input:focus {
   background-color: #ffffff;
   border-color: #cbd5e0;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.split-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Floating labels for Adults/Children inputs */
+.floating-label {
+  position: absolute;
+  font-size: 10px;
+  top: 4px;
+  left: 25px;
+  color: #a0aec0;
+  pointer-events: none;
+}
+
+.search-input[type="number"] {
+  padding-top: 20px;
+  padding-bottom: 10px;
 }
 
 .clear-btn {
@@ -63,15 +102,6 @@ body {
   cursor: pointer;
   padding: 5px;
   display: flex;
-  z-index: 10;
-}
-
-.clear-btn:hover {
-  color: #4a5568;
-}
-
-.dropdown-arrow {
-  pointer-events: none;
 }
 
 .submit-btn {
@@ -85,46 +115,94 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;
+  margin-top: 10px;
 }
+.submit-btn:hover { background-color: #4a5568; }
+.submit-btn:active { transform: scale(0.98); }
 
-.submit-btn:hover {
-  background-color: #4a5568;
-}
-
-.submit-btn:active {
-  transform: scale(0.98);
-}
-
-.submit-btn:disabled {
-  background-color: #cbd5e0;
-  cursor: not-allowed;
-}
-
-.split-row {
+/* --- LIST VIEW STYLES --- */
+.trip-card {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.trip-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+
+.trip-info { flex-grow: 1; padding-right: 20px; }
+.trip-title { font-size: 18px; font-weight: bold; color: #2d3748; margin-bottom: 8px; display: block; }
+.trip-route { font-size: 14px; color: #718096; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.tag-container { display: flex; gap: 10px; flex-wrap: wrap; }
+.tag { font-size: 12px; padding: 4px 12px; border-radius: 50px; font-weight: 600; white-space: nowrap; }
+.tag.hotel { background-color: #e9d8fd; color: #6b46c1; }
+.tag.flight { background-color: #bee3f8; color: #2b6cb0; }
+.tag.duration { background-color: #c6f6d5; color: #276749; }
+
+.trip-action { display: flex; flex-direction: column; align-items: flex-end; min-width: 120px; border-left: 1px solid #e2e8f0; padding-left: 20px; }
+.price { font-size: 24px; font-weight: bold; color: #2d3748; margin-bottom: 5px; }
+.per-person { font-size: 12px; color: #a0aec0; margin-bottom: 15px; }
+.view-btn { padding: 10px 25px; background-color: #718096; color: white; border: none; border-radius: 50px; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+@media (max-width: 600px) {
+  .trip-card { flex-direction: column; align-items: flex-start; }
+  .trip-action { width: 100%; border-left: none; border-top: 1px solid #e2e8f0; padding-left: 0; padding-top: 20px; margin-top: 20px; flex-direction: row; justify-content: space-between; align-items: center; }
+  .per-person { margin-bottom: 0; }
 }
 
-.input-label {
-  position: absolute;
-  font-size: 10px;
-  top: 4px;
-  left: 25px;
-  color: #a0aec0;
+/* --- DETAILS VIEW STYLES --- */
+.day-badge {
+  background-color: #718096;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  margin: 20px 0 10px 0;
+  font-size: 15px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; max-width: 280px;
+  user-select: none;
 }
+.day-badge.active .toggle-icon { transform: rotate(180deg); }
+.timeline-group { width: 100%; max-width: 700px; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s ease, opacity 0.5s ease; }
+.timeline-group.show { max-height: 5000px; opacity: 1; overflow: visible; margin-bottom: 20px; }
 
-.number-input {
-  padding-top: 20px;
-  padding-bottom: 10px;
-}
+.timeline-item { display: flex; width: 100%; margin-bottom: 20px; position: relative; align-items: flex-start; padding-top: 10px; }
+.time-col { width: 70px; text-align: right; padding-right: 15px; font-weight: bold; color: #718096; font-size: 14px; padding-top: 15px; flex-shrink: 0; }
+.icon-col { display: flex; flex-direction: column; align-items: center; margin-right: 20px; position: relative; width: 50px; flex-shrink: 0; }
+.line { position: absolute; top: 50px; bottom: -40px; width: 2px; background-color: #cbd5e0; z-index: 0; }
+.timeline-item:last-child .line { display: none; }
+.time-icon { width: 50px; height: 50px; background-color: #ffffff; border: 2px solid #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; z-index: 1; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-/* --- Results List Styles --- */
-.results-wrapper {
-  display: flex;
-  justify-content: center;
-  padding: 20px;
+.itinerary-card { flex-grow: 1; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 20px; box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05); }
+.card-title { font-weight: bold; color: #2d3748; font-size: 16px; margin-bottom: 5px; display: block; }
+.card-detail { font-size: 14px; color: #718096; line-height: 1.5; }
+ul.activity-list { margin: 8px 0 0 0; padding-left: 20px; }
+
+.back-link { align-self: flex-start; margin-bottom: 20px; color: #718096; background: none; border: none; cursor: pointer; font-weight: 600; font-size: 14px; }
+
+/* Action Footer */
+.action-footer { width: 100%; margin-top: 40px; padding-bottom: 20px; display: flex; justify-content: center; }
+.btn-proceed {
+  width: 100%; max-width: 400px; padding: 18px; background-color: #2d3748; color: white;
+  border: none; border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); transition: all 0.2s ease;
 }
+.btn-proceed:hover { background-color: #1a202c; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); }
+.btn-proceed:active { transform: scale(0.98); }
+
+/* ... [KEEP ALL PREVIOUS CSS] ... */
+
+/* --- NEW: FLIGHT RESULTS (list_multi_flights.html) --- */
 
 .results-container {
   width: 100%;
@@ -132,8 +210,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-top: 20px;
 }
 
+/* Flight Card Container */
 .flight-card {
   background-color: #ffffff;
   border-radius: 20px;
@@ -141,12 +221,14 @@ body {
   border: 1px solid #e2e8f0;
   overflow: hidden;
   transition: box-shadow 0.2s;
+  width: 100%;
 }
 
 .flight-card:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
+/* Header Section */
 .card-header {
   padding: 20px 25px;
   display: flex;
@@ -156,71 +238,48 @@ body {
   background-color: #ffffff;
 }
 
-.card-header:hover {
-  background-color: #f7fafc;
-}
+.card-header:hover { background-color: #f7fafc; }
 
-.route-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
+.route-info { display: flex; flex-direction: column; gap: 5px; }
 
 .airline-name {
   font-size: 14px;
   font-weight: 600;
-  color: #718096;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  color: #718096; 
+  display: flex; align-items: center; gap: 8px;
 }
 
-.time-range {
-  font-size: 18px;
-  font-weight: bold;
-  color: #2d3748;
-}
+.time-range { font-size: 18px; font-weight: bold; color: #2d3748; }
+.duration-stops { font-size: 12px; color: #a0aec0; }
 
-.day-offset {
-  font-size: 12px;
-  color: #a0aec0;
-}
-
-.duration-stops {
-  font-size: 12px;
-  color: #a0aec0;
-}
-
-.price-action {
-  text-align: right;
-}
-
-.price {
-  font-size: 22px;
-  font-weight: bold;
-  color: #4a5568;
-  display: block;
-}
+.price-action { text-align: right; }
+.price { font-size: 22px; font-weight: bold; color: #4a5568; display: block; }
 
 .expand-icon {
-  font-size: 14px;
-  color: #a0aec0;
-  margin-top: 5px;
-  transition: transform 0.3s ease;
-  display: inline-block;
+  font-size: 14px; color: #a0aec0; margin-top: 5px;
+  transition: transform 0.3s ease; display: inline-block;
 }
+/* Rotate icon when active class is applied */
+.flight-card.active .expand-icon { transform: rotate(180deg); }
 
-.flight-card.active .expand-icon {
-  transform: rotate(180deg);
-}
-
+/* --- DROPDOWN DETAILS (Timeline) --- */
 .card-details {
+  display: none; /* Hidden by default */
   padding: 0 25px 25px 25px;
   background-color: #fcfcfc;
   border-top: 1px solid #edf2f7;
 }
 
-/* Timeline Styles */
+.flight-card.active .card-details {
+  display: block; /* Shown when active */
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .segment {
   position: relative;
   padding-left: 20px;
@@ -231,7 +290,7 @@ body {
 }
 
 .segment.last-segment {
-  border-left: none;
+  border-left: none; 
   padding-bottom: 0;
 }
 
@@ -248,32 +307,12 @@ body {
   z-index: 2;
 }
 
-.end-dot {
-  top: auto;
-  bottom: 0;
-}
+.end-dot { top: auto; bottom: 0; }
 
-.segment-detail-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-
-.seg-time {
-  font-weight: bold;
-  color: #2d3748;
-}
-
-.seg-code {
-  font-weight: bold;
-  color: #4a5568;
-}
-
-.seg-meta {
-  font-size: 12px;
-  color: #718096;
-  margin-top: 5px;
-}
+.segment-detail-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.seg-time { font-weight: bold; color: #2d3748; }
+.seg-code { font-weight: bold; color: #4a5568; }
+.seg-meta { font-size: 12px; color: #718096; margin-top: 5px; }
 
 .layover-badge {
   position: relative;
@@ -289,32 +328,8 @@ body {
 }
 
 .book-btn {
-  width: 100%;
-  padding: 12px;
-  margin-top: 20px;
-  background-color: #718096;
-  color: white;
-  border: none;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
+  width: 100%; padding: 12px; margin-top: 20px;
+  background-color: #718096; color: white;
+  border: none; border-radius: 50px; font-weight: 600; cursor: pointer;
 }
-
-.book-btn:hover {
-  background-color: #4a5568;
-}
-
-.back-btn {
-  margin-bottom: 20px;
-  background: none;
-  border: none;
-  color: #718096;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.back-btn:hover {
-  text-decoration: underline;
-}
+.book-btn:hover { background-color: #4a5568; }
