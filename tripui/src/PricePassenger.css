@@ -1,0 +1,265 @@
+/* --- 1. Layout & Containers --- */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Base Card Style */
+.card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Keeps content inside rounded corners */
+  margin-bottom: 20px;
+}
+
+/* --- 2. Price Accordion Header --- */
+.price-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.price-header:hover {
+  background-color: #f7fafc;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-icon {
+  font-size: 12px;
+  color: #a0aec0;
+  transition: transform 0.3s ease;
+}
+
+/* Rotate arrow when the parent has the 'active' class */
+.price-header.active .toggle-icon {
+  transform: rotate(180deg);
+}
+
+.price-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.big-total {
+  font-size: 26px;
+  font-weight: 800;
+  color: #4a5568;
+}
+
+/* --- 3. Price Details Dropdown --- */
+.price-details-content {
+  display: none; /* Hidden by default */
+  padding: 0 25px 25px 25px;
+  border-top: 1px solid #edf2f7;
+  background-color: #fcfcfc;
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Ensure it displays when the card has 'expanded' class */
+.card.expanded .price-details-content {
+  display: block;
+}
+
+.invoice-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.invoice-divider {
+  border: 0;
+  border-top: 1px dashed #cbd5e0;
+  margin: 15px 0;
+}
+
+.invoice-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 700;
+  color: #2d3748;
+  margin-top: 5px;
+}
+
+.currency-code {
+  font-size: 11px;
+  color: #a0aec0;
+  margin-right: 2px;
+}
+
+/* --- 4. Form Layouts (The "Broken" Parts) --- */
+.form-card {
+  padding: 25px;
+}
+
+.form-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2d3748;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+.form-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  margin-top: 25px;
+}
+
+/* Grid System for Inputs */
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  gap: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.full-width {
+  grid-column: span 2; /* Span across both columns */
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.input-group label {
+  font-size: 12px;
+  color: #718096;
+  font-weight: 600;
+  margin-left: 10px;
+  text-transform: uppercase;
+}
+
+/* --- 5. Inputs & Buttons --- */
+.form-input {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 15px;
+  color: #4a5568;
+  background-color: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 50px;
+  outline: none;
+  box-sizing: border-box; /* Critical for layout */
+  transition: all 0.2s;
+  -webkit-appearance: none; /* Removes default browser styles */
+}
+
+.form-input:focus {
+  background-color: #ffffff;
+  border-color: #cbd5e0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 15px 0;
+  background-color: #718096;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 20px;
+}
+
+.submit-btn:hover {
+  background-color: #4a5568;
+}
+
+.btn-outline {
+  width: 100%;
+  padding: 12px 0;
+  background-color: transparent;
+  color: #718096;
+  border: 2px dashed #cbd5e0;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.btn-outline:hover {
+  border-color: #718096;
+  background-color: #f7fafc;
+}
+
+.remove-btn {
+  color: #e53e3e;
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.back-link {
+  align-self: flex-start;
+  margin-bottom: 20px;
+  color: #718096;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid #f0f2f5;
+  margin: 20px 0;
+}
+
+/* --- 6. Animation Keyframes --- */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .input-grid {
+    grid-template-columns: 1fr; /* Stack inputs on mobile */
+  }
+  .full-width {
+    grid-column: span 1;
+  }
+}

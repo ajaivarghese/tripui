@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
+import PricePassenger from './PricePassenger'; // <--- ADD THIS LINE
+
 
 // --- MOCK API SERVICE ---
 // Simulates the backend interactions described in your requirements
@@ -159,6 +161,18 @@ const mockBackend = {
         ]);
       }, 1500); // Simulated network delay
     });
+  },
+  // NEW: Get Passenger/Price info (POST to https://travelapi.myvnc.com/flights/passengers)
+  fetchPassengerPriceInfo: async (flightId) => {
+    console.log(`POST https://travelapi.myvnc.com/flights/passengers with flightId: ${flightId}`);
+    return new Promise((resolve) => setTimeout(() => {
+      // Return JSON matching the price_passenger.html needs
+      resolve({ 
+        basePrice: 416.50,
+        currency: "USD",
+        flightId: flightId
+      });
+    }, 800));
   }
 };
 
@@ -351,7 +365,7 @@ const FlightBooking = ({ onBack, onSearchFlights }) => {
 
 // --- COMPONENT 5: FlightResults ---
 // Displays results after searching flights in booking view
-const FlightResults = ({ flights, onBack }) => {
+const FlightResults = ({ flights, onBack, onSelectFlight }) => {
   const [activeCardId, setActiveCardId] = useState(null);
 
   const toggleCard = (id) => {
@@ -409,7 +423,8 @@ const FlightResults = ({ flights, onBack }) => {
                 </React.Fragment>
               ))}
 
-              <button className="book-btn" onClick={() => alert("Flight Selected! Proceeding to Payment...")}>Select Flight</button>
+              
+              <button className="book-btn" onClick={() => onSelectFlight(flight.id)}>Select Flight</button>
             </div>
           </div>
         ))}
@@ -423,6 +438,7 @@ function App() {
   // Views: 'search' | 'list' | 'details' | 'booking' | 'flightResults'
   const [view, setView] = useState('search'); 
   const [loading, setLoading] = useState(false);
+  const [currentBasePrice, setCurrentBasePrice] = useState(0);
   
   // Data Store
   const [tripResults, setTripResults] = useState([]);
@@ -464,6 +480,20 @@ function App() {
     setView('flightResults');
     setLoading(false);
   };
+
+  // 5. Flight Results -> Price/Passenger
+  const handleSelectFlight = async (flightId) => {
+    setLoading(true);
+    // 1. Call the new backend method to get pricing for this specific flight
+    // (Ensure your mockBackend has fetchPassengerPriceInfo as shown in the previous step)
+    const data = await mockBackend.fetchPassengerPriceInfo(flightId);
+    // 2. Update state with the returned base price
+    setCurrentBasePrice(data.basePrice);
+    // 3. Switch the view to 'price' to render PricePassenger.js
+    setView('price');
+    setLoading(false);
+  };
+
 
   return (
     <div className="app-wrapper">
@@ -507,10 +537,24 @@ function App() {
         />
       )}
 
-      {!loading && view === 'flightResults' && (
+      {/* UPDATE FLIGHT RESULTS to use the new handler */}
+       {!loading && view === 'flightResults' && (
         <FlightResults 
           flights={flightResults} 
           onBack={() => setView('booking')}
+          onSelectFlight={handleSelectFlight} // <--- Connect here
+        />
+      )}
+
+      {/* ADD THE NEW COMPONENT VIEW */}
+      {!loading && view === 'price' && (
+        <PricePassenger 
+          basePrice={currentBasePrice}
+          onBack={() => setView('flightResults')}
+          onConfirm={(travelers) => {
+             console.log("Confirmed Travelers:", travelers);
+             setView('meal'); // Or next step
+          }}
         />
       )}
     </div>
