@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
-import PricePassenger from './PricePassenger'; // <--- ADD THIS LINE
-
+import PricePassenger from './PricePassenger';
+import MealPreference from './MealPreference';
 
 // --- MOCK API SERVICE ---
 // Simulates the backend interactions described in your requirements
@@ -173,6 +173,13 @@ const mockBackend = {
         flightId: flightId
       });
     }, 800));
+  },
+  // NEW: POST to https://travelapi.myvnc.com/payments/confirm
+  confirmPayment: async (paymentData) => {
+    console.log("POST https://travelapi.myvnc.com/payments/confirm", paymentData);
+    return new Promise((resolve) => setTimeout(() => {
+      resolve({ success: true, bookingRef: "XYZ-123" });
+    }, 1000));
   }
 };
 
@@ -439,7 +446,8 @@ function App() {
   const [view, setView] = useState('search'); 
   const [loading, setLoading] = useState(false);
   const [currentBasePrice, setCurrentBasePrice] = useState(0);
-  
+  const [confirmedTravelers, setConfirmedTravelers] = useState([]); // State to store travelers
+
   // Data Store
   const [tripResults, setTripResults] = useState([]);
   const [selectedItinerary, setSelectedItinerary] = useState([]);
@@ -492,6 +500,24 @@ function App() {
     // 3. Switch the view to 'price' to render PricePassenger.js
     setView('price');
     setLoading(false);
+  };
+
+  const handleConfirmPay = async (travelers) => {
+    setLoading(true);
+    // 1. Call Backend to process payment
+    await mockBackend.confirmPayment({ travelers, total: 1000 }); // Mock total
+    // 2. Save travelers to state so we can list them in the Meal view
+    setConfirmedTravelers(travelers);
+    // 3. Switch view
+    setView('meal');
+    setLoading(false);
+  };
+
+  // NEW HANDLER: Save Meals (Final Step)
+  const handleSaveMeals = () => {
+    alert("Preferences Saved! Booking Complete.");
+    // Optionally redirect to home or a success page
+    setView('search'); 
   };
 
 
@@ -551,11 +577,16 @@ function App() {
         <PricePassenger 
           basePrice={currentBasePrice}
           onBack={() => setView('flightResults')}
-          onConfirm={(travelers) => {
-             console.log("Confirmed Travelers:", travelers);
-             setView('meal'); // Or next step
-          }}
+          onConfirm={handleConfirmPay}
         />
+      )}
+
+      {/* Render the new MealPreference View */}
+        {!loading && view === 'meal' && (
+          <MealPreference 
+            passengers={confirmedTravelers} 
+            onSave={handleSaveMeals}
+          />
       )}
     </div>
   );
