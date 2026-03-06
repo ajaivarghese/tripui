@@ -1,0 +1,134 @@
+/* ItineraryList.css */
+.list-container { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  padding: 40px 20px; 
+  max-width: 800px; 
+  margin: 0 auto; 
+  color: #4a5568;
+}
+
+h1 {
+  color: #2d3748;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.trip-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.trip-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e0;
+}
+
+.trip-info {
+  flex-grow: 1;
+  padding-right: 20px;
+}
+
+.trip-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2d3748;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.trip-route {
+  font-size: 14px;
+  color: #718096;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tag-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 50px;
+  background-color: #edf2f7;
+  color: #4a5568;
+  font-weight: 600;
+}
+
+.tag.hotel { background-color: #e9d8fd; color: #6b46c1; } 
+.tag.flight { background-color: #bee3f8; color: #2b6cb0; } 
+.tag.duration { background-color: #c6f6d5; color: #276749; } 
+
+.trip-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 120px;
+  border-left: 1px solid #e2e8f0;
+  padding-left: 20px;
+}
+
+.price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2d3748;
+  margin-bottom: 5px;
+}
+
+.per-person {
+  font-size: 12px;
+  color: #a0aec0;
+  margin-bottom: 15px;
+}
+
+.view-btn {
+  padding: 10px 25px;
+  background-color: #718096;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.view-btn:hover { background-color: #4a5568; }
+
+@media (max-width: 600px) {
+  .trip-card { flex-direction: column; align-items: flex-start; }
+  .trip-action { 
+    width: 100%; 
+    border-left: none; 
+    border-top: 1px solid #e2e8f0; 
+    padding-left: 0; 
+    padding-top: 20px; 
+    margin-top: 20px; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: center; 
+  }
+  .per-person { margin-bottom: 0; }
+}
