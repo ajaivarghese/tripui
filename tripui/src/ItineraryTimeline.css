@@ -1,0 +1,139 @@
+/* ItineraryTimeline.css */
+.timeline-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  color: #2d3748;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #718096;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.back-btn:hover {
+  color: #2d3748;
+}
+
+.day-section {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.day-header {
+  background-color: #f7fafc;
+  padding: 15px 25px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2d3748;
+}
+
+.events-list {
+  padding: 20px 25px;
+}
+
+.event-item {
+  display: flex;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.event-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Timeline vertical line */
+.event-item::before {
+  content: '';
+  position: absolute;
+  left: 65px;
+  top: 30px;
+  bottom: -25px;
+  width: 2px;
+  background-color: #e2e8f0;
+}
+
+.event-item:last-child::before {
+  display: none;
+}
+
+.event-time {
+  min-width: 85px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #718096;
+  padding-top: 5px;
+}
+
+.event-icon {
+  font-size: 20px;
+  background-color: #ffffff;
+  border: 2px solid #cbd5e0;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  z-index: 1;
+}
+
+.event-content {
+  flex-grow: 1;
+  background-color: #f7fafc;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.event-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.event-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.event-tag {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 50px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Tag Colors mapped from your mock data classes */
+.tag-flight { background-color: #bee3f8; color: #2b6cb0; }
+.tag-taxi { background-color: #feebc8; color: #c05621; }
+.tag-tours { background-color: #e9d8fd; color: #6b46c1; }
+.tag-stay { background-color: #fed7d7; color: #c53030; }
+.tag-activity { background-color: #c6f6d5; color: #276749; }
+.tag-adventure { background-color: #ffdaf0; color: #97266d; }
+
+.event-details {
+  font-size: 14px;
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+.activity-list {
+  margin: 5px 0 0 20px;
+  padding: 0;
+}
