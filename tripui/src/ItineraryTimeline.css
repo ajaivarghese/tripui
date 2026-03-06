@@ -39,6 +39,23 @@
   font-size: 18px;
   font-weight: bold;
   color: #2d3748;
+  
+  /* Added for collapsible functionality */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.day-header:hover {
+  background-color: #edf2f7;
+}
+
+.collapse-icon {
+  font-size: 14px;
+  color: #a0aec0;
 }
 
 .events-list {
@@ -49,6 +66,9 @@
   display: flex;
   margin-bottom: 25px;
   position: relative;
+  
+  /* Added to indicate clickability */
+  cursor: pointer;
 }
 
 .event-item:last-child {
@@ -97,6 +117,16 @@
   background-color: #f7fafc;
   padding: 15px;
   border-radius: 10px;
+  
+  /* Added transition for smooth hover effects */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+/* Added hover states for the clickable cards */
+.event-item:hover .event-content {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
 }
 
 .event-title-row {
