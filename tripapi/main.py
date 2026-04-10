@@ -1,5 +1,6 @@
 # main.py
-# Import the router from our new file
+import flight_booking_view  # --- NEW IMPORT ---
+import flight_list_view  # --- NEW IMPORT ---
 import itinerary_view
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,8 +17,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Include the External Router ---
+# --- Include Routers ---
 app.include_router(itinerary_view.router)
+app.include_router(flight_booking_view.router)  # --- NEW ROUTER ---
+app.include_router(flight_list_view.router)  # --- NEW ROUTER ---
 
 
 # --- Request Model for Search ---
