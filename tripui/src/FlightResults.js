@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './FlightResults.css';
 
-// Fallback data in case the API call fails or returns empty
 const FALLBACK_FLIGHTS = [
   {
     id: "f1",
@@ -10,6 +9,7 @@ const FALLBACK_FLIGHTS = [
     nextDay: "(+2d)",
     durationStops: "18h 10m | 1 Stop (AUH)",
     price: "$416.50",
+    basePrice: 416.50,
     segments: [
       { depTime: "21:55 JFK", depCode: "New York T4", meta: "Boeing 787-9 | 12h 40m", arrTime: "19:35 AUH", arrCode: "Abu Dhabi TA" },
       { depTime: "21:00 AUH", depCode: "Abu Dhabi TA", meta: "Boeing 737 Max 8", arrTime: "02:35 COK", arrCode: "Kochi T3", isLast: true }
@@ -20,9 +20,45 @@ const FALLBACK_FLIGHTS = [
 
 const FlightResults = ({ flights = FALLBACK_FLIGHTS, onBack, onSelectFlight }) => {
   const [activeCardId, setActiveCardId] = useState(null);
+  const [loadingFlightId, setLoadingFlightId] = useState(null);
 
   const toggleCard = (id) => {
     setActiveCardId(activeCardId === id ? null : id);
+  };
+
+  const handleSelect = async (flight, e) => {
+    e.stopPropagation();
+    setLoadingFlightId(flight.id);
+
+    try {
+      console.log(`POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/flight/passengers`);
+      
+      const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/flight/passengers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ flightId: flight.id })
+      });
+
+      let passengerConfig = {};
+      if (response.ok) {
+        passengerConfig = await response.json();
+      } else {
+        console.warn("API returned an error, using fallback config.");
+        passengerConfig = { basePrice: flight.basePrice || 416.50 };
+      }
+      
+      if (onSelectFlight) {
+        onSelectFlight(flight, passengerConfig);
+      }
+    } catch (error) {
+      console.error("Error fetching passenger form config:", error);
+      // Fallback for demonstration if API is unreachable
+      if (onSelectFlight) {
+        onSelectFlight(flight, { basePrice: flight.basePrice || 416.50 });
+      }
+    } finally {
+      setLoadingFlightId(null);
+    }
   };
 
   const displayFlights = flights && flights.length > 0 ? flights : FALLBACK_FLIGHTS;
@@ -30,7 +66,6 @@ const FlightResults = ({ flights = FALLBACK_FLIGHTS, onBack, onSelectFlight }) =
   return (
     <div className="flight-results-wrapper">
       <div className="results-container">
-        
         <button 
           style={{ alignSelf: 'flex-start', background: 'none', border: 'none', color: '#718096', cursor: 'pointer', fontWeight: 'bold' }} 
           onClick={onBack}
@@ -82,13 +117,16 @@ const FlightResults = ({ flights = FALLBACK_FLIGHTS, onBack, onSelectFlight }) =
                 </React.Fragment>
               ))}
 
-              <button className="book-btn" onClick={() => onSelectFlight && onSelectFlight(flight)}>
-                Select Flight
+              <button 
+                className="book-btn" 
+                onClick={(e) => handleSelect(flight, e)}
+                disabled={loadingFlightId === flight.id}
+              >
+                {loadingFlightId === flight.id ? 'Processing...' : 'Select Flight'}
               </button>
             </div>
           </div>
         ))}
-
       </div>
     </div>
   );

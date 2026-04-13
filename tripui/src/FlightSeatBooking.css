@@ -1,0 +1,69 @@
+/* FlightSeatBooking.css */
+.seat-booking-wrapper { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
+.seat-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 20px; }
+
+.seat-card {
+  background-color: #ffffff; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0; padding: 25px; display: flex; flex-direction: column; align-items: center;
+  height: 80vh; max-height: 700px;
+}
+
+.seat-title { font-size: 18px; font-weight: 700; color: #2d3748; margin-bottom: 5px; }
+.seat-subtitle { font-size: 13px; color: #718096; margin-bottom: 20px; }
+
+/* Legend */
+.seat-legend { display: flex; gap: 15px; margin-bottom: 15px; background-color: #f7fafc; padding: 10px 20px; border-radius: 50px; flex-shrink: 0; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #718096; font-weight: 600; }
+.legend-dot { width: 12px; height: 12px; border-radius: 4px; }
+.dot-avail { background-color: #ffffff; border: 1px solid #cbd5e0; }
+.dot-select { background-color: #718096; border: 1px solid #718096; }
+.dot-occ { background-color: #e2e8f0; opacity: 0.5; text-align: center; line-height: 10px; font-size: 10px; color: #a0aec0; }
+
+/* Scrollable area */
+.scroll-viewport {
+  width: 100%; flex-grow: 1; overflow-y: auto; padding-right: 5px; scrollbar-width: thin; scrollbar-color: #cbd5e0 transparent;
+}
+.scroll-viewport::-webkit-scrollbar { width: 6px; }
+.scroll-viewport::-webkit-scrollbar-track { background: transparent; }
+.scroll-viewport::-webkit-scrollbar-thumb { background-color: #cbd5e0; border-radius: 10px; }
+
+/* Fuselage & Seats */
+.fuselage { width: 100%; display: flex; flex-direction: column; gap: 12px; padding-bottom: 10px; }
+.seat-row { display: flex; justify-content: center; gap: 6px; align-items: center; }
+.row-num { width: 20px; text-align: center; font-size: 10px; color: #a0aec0; font-weight: bold; }
+.aisle { width: 20px; }
+.cabin-label { width: 100%; text-align: center; font-size: 10px; letter-spacing: 1px; color: #a0aec0; margin: 15px 0 5px 0; text-transform: uppercase; }
+
+.seat-box {
+  width: 35px; height: 40px; background-color: #ffffff; border: 1px solid #cbd5e0;
+  border-radius: 8px 8px 12px 12px; cursor: pointer; position: relative; transition: all 0.2s;
+}
+.seat-box:not(.occupied):hover { border-color: #718096; transform: translateY(-2px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.seat-box.selected { background-color: #718096; border-color: #718096; color: white; }
+.seat-box.selected::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: white; }
+.seat-box.occupied { background-color: #edf2f7; border-color: #edf2f7; cursor: not-allowed; }
+.seat-box.occupied::after { content: '×'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 16px; color: #cbd5e0; }
+.seat-box.business { width: 45px; height: 50px; border-width: 2px; }
+
+/* Footer */
+.seat-footer {
+  width: 100%; padding: 20px; margin-top: 10px; border-top: 1px solid #f7fafc;
+  text-align: center; flex-shrink: 0; background-color: white; z-index: 2; box-sizing: border-box;
+}
+
+.limit-message {
+  background-color: #fff5f5; color: #c53030; font-size: 13px; font-weight: 600;
+  padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #feb2b2;
+  animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+.selected-seat-text { font-size: 14px; color: #718096; margin-bottom: 10px; }
+.seat-code { font-weight: 800; color: #2d3748; font-size: 18px; }
+
+.confirm-seat-btn {
+  width: 100%; padding: 15px 0; background-color: #718096; color: white;
+  border: none; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s;
+}
+.confirm-seat-btn:hover { background-color: #4a5568; }
+.confirm-seat-btn:disabled { background-color: #cbd5e0; cursor: not-allowed; }

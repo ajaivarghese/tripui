@@ -3,30 +3,39 @@ import React, { useState } from 'react';
 import './App.css';
 import ItineraryList from './ItineraryList';
 import ItineraryTimeline from './ItineraryTimeline';
-import FlightBooking from './FlightBooking'; // <-- Import new component
-import FlightResults from './FlightResult'; // <-- Import new component
+import FlightBooking from './FlightBooking'; 
+import FlightResults from './FlightResults'; 
+import FlightPricePassenger from './FlightPricePassenger'; 
+import FlightSeatBooking from './FlightSeatBooking';       
 
 function App() {
   // --- VIEW ROUTING STATE ---
-  // Controls which main component is visible: 'home' | 'timeline' | 'flightBooking' | 'flightResults'
+  // Controls which main component is visible: 
+  // 'home' | 'timeline' | 'flightBooking' | 'flightResults' | 'flightPricePassenger' | 'flightSeatBooking'
   const [currentView, setCurrentView] = useState('home');
 
   // --- DATA STATES ---
   const [searchTerm, setSearchTerm] = useState('');
   const [itineraries, setItineraries] = useState([]);
   const [detailedViewData, setDetailedViewData] = useState(null); 
-  const [flightSearchConfig, setFlightSearchConfig] = useState(null); // Data for flight booking form
-  const [flightResultsData, setFlightResultsData] = useState(null); // Data for flight results list
+  
+  // Flight & Booking States
+  const [flightSearchConfig, setFlightSearchConfig] = useState(null); 
+  const [flightResultsData, setFlightResultsData] = useState(null); 
+  const [selectedFlightData, setSelectedFlightData] = useState(null); 
+  const [passengerConfigData, setPassengerConfigData] = useState(null); 
+  const [seatDataConfig, setSeatDataConfig] = useState(null); 
+  const [passengerCount, setPassengerCount] = useState(1);
   
   // --- LOADING STATES ---
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailsLoading, setIsDetailsLoading] = useState(false);
 
-  // 1. Fetch the High-Level List
+  // 1. Fetch the High-Level List (Home View)
   const handleSearch = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setDetailedViewData(null); // Reset details 
+    setDetailedViewData(null); 
 
     try {
       const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/search', {
@@ -44,7 +53,7 @@ function App() {
     }
   };
 
-  // 2. Fetch the Detailed Timeline JSON
+  // 2. Fetch the Detailed Timeline JSON (Timeline View)
   const fetchItineraryDetails = async (tripId) => {
     setIsDetailsLoading(true);
 
@@ -57,7 +66,7 @@ function App() {
       
       const data = await response.json();
       setDetailedViewData(data.days); // Pass the "days" array to the timeline
-      setCurrentView('timeline'); // Switch view
+      setCurrentView('timeline'); 
     } catch (error) {
       console.error("Failed to fetch itinerary details:", error);
     } finally {
@@ -118,7 +127,6 @@ function App() {
           timelineData={detailedViewData} 
           onBack={handleBackToHome} 
           onShowFlightSearch={(configData) => {
-            // Triggered when a flight card is clicked in ItineraryTimeline.js
             setFlightSearchConfig(configData);
             setCurrentView('flightBooking');
           }}
@@ -130,7 +138,6 @@ function App() {
           searchConfig={flightSearchConfig}
           onBack={() => setCurrentView('timeline')}
           onShowResults={(resultsData) => {
-            // Triggered when "Search Flights" is clicked in FlightBooking.js
             setFlightResultsData(resultsData);
             setCurrentView('flightResults');
           }}
@@ -141,11 +148,32 @@ function App() {
         <FlightResults 
           flights={flightResultsData}
           onBack={() => setCurrentView('flightBooking')}
-          onSelectFlight={(flight) => {
-             // Handle what happens when they select a specific flight
-             console.log('Flight Selected:', flight);
-             alert(`You selected ${flight.airline}. Proceeding to Next Step...`);
+          onSelectFlight={(flight, passengerConfig) => {
+             setSelectedFlightData(flight);
+             setPassengerConfigData(passengerConfig);
+             setCurrentView('flightPricePassenger');
           }}
+        />
+      )}
+
+      {!isDetailsLoading && currentView === 'flightPricePassenger' && (
+        <FlightPricePassenger 
+          flight={selectedFlightData}
+          passengerConfig={passengerConfigData}
+          onBack={() => setCurrentView('flightResults')}
+          onConfirmSeats={(seatData, pCount) => {
+             setSeatDataConfig(seatData);
+             setPassengerCount(pCount);
+             setCurrentView('flightSeatBooking');
+          }}
+        />
+      )}
+
+      {!isDetailsLoading && currentView === 'flightSeatBooking' && (
+        <FlightSeatBooking 
+          seatData={seatDataConfig}
+          maxSeats={passengerCount}
+          onBack={() => setCurrentView('flightPricePassenger')}
         />
       )}
 

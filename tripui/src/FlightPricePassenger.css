@@ -1,0 +1,51 @@
+/* FlightPricePassenger.css */
+.passenger-wrapper { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
+.passenger-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 20px; }
+
+.passenger-card {
+  background-color: #ffffff; border-radius: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0; overflow: hidden; padding: 0; 
+}
+.passenger-card.form-card { padding: 25px; }
+
+/* Flight Summary Header */
+.summary-header { padding: 20px 25px; background-color: #ffffff; }
+.route-info { display: flex; flex-direction: column; gap: 5px; }
+.airline-name { font-size: 14px; font-weight: 600; color: #718096; display: flex; align-items: center; gap: 8px; }
+.time-range { font-size: 18px; font-weight: bold; color: #2d3748; }
+.duration-stops { font-size: 12px; color: #a0aec0; }
+
+/* Price Header */
+.price-header { display: flex; justify-content: space-between; align-items: center; padding: 25px; background-color: #fff; }
+.price-title { font-size: 18px; font-weight: 700; color: #2d3748; }
+.big-total { font-size: 26px; font-weight: 800; color: #4a5568; }
+
+/* Form Styles */
+.form-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; margin-top: 25px; }
+.form-section-title { font-size: 16px; font-weight: 700; color: #2d3748; text-transform: uppercase; }
+.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+.full-width { grid-column: span 2; }
+.input-group label { display: block; font-size: 12px; color: #718096; font-weight: 600; margin-bottom: 5px; margin-left: 10px; }
+
+.form-input {
+  width: 100%; padding: 12px 20px; font-size: 15px; color: #4a5568;
+  background-color: #f7fafc; border: 1px solid #e2e8f0; border-radius: 50px;
+  outline: none; box-sizing: border-box; -webkit-appearance: none;
+}
+.form-input:focus { background-color: #ffffff; border-color: #cbd5e0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+
+.submit-btn {
+  width: 100%; padding: 15px 0; background-color: #718096; color: white;
+  border: none; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; margin-top: 10px;
+}
+.submit-btn:hover { background-color: #4a5568; }
+.submit-btn:disabled { background-color: #a0aec0; cursor: not-allowed; }
+
+.btn-outline {
+  width: 100%; padding: 12px 0; background-color: transparent; color: #718096;
+  border: 2px dashed #cbd5e0; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 20px; margin-bottom: 20px;
+}
+.btn-outline:hover { border-color: #718096; background-color: #f7fafc; }
+.remove-btn { color: #e53e3e; background: none; border: none; font-size: 12px; font-weight: bold; cursor: pointer; text-decoration: underline; }
+.divider { border: 0; border-top: 1px solid #f0f2f5; margin: 20px 0; }
