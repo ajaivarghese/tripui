@@ -19,7 +19,7 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
   };
 
   const handleEventClick = async (event) => {
-    // Check if the event is a flight
+    // Detect if the event is a flight based on title or icon
     const isFlight = event.title.toLowerCase().includes('flight') || event.icon === '✈️';
 
     if (isFlight) {
@@ -35,7 +35,7 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
         
         const searchConfigData = await response.json();
         
-        // Pass data to parent to switch view to FlightBooking
+        // Callback to App.js to switch view
         if (onShowFlightSearch) {
           onShowFlightSearch(searchConfigData);
         }
@@ -46,10 +46,7 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
         setLoadingEventId(null);
       }
     } else {
-      // Default behavior for non-flight events
-      if (onEventClick) {
-        onEventClick(event);
-      }
+      if (onEventClick) onEventClick(event);
     }
   };
 
@@ -72,7 +69,7 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
             <div className="events-list">
               {day.events.map((event, index) => {
                 const isLoading = loadingEventId === (event.id || event.title);
-
+                
                 return (
                   <div 
                     className="event-item" 
@@ -86,7 +83,7 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
                     <div className="event-content">
                       <div className="event-title-row">
                         <span className="event-title">
-                          {event.title} {isLoading && '(Loading...)'}
+                           {event.title} {isLoading && '(Loading...)'}
                         </span>
                         <span className={`event-tag ${event.tagClass}`}>
                           {event.tagLabel}

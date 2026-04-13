@@ -4,7 +4,6 @@ import './FlightBooking.css';
 const FlightBooking = ({ searchConfig, onShowResults, onBack }) => {
   const [loading, setLoading] = useState(false);
 
-  // You can tie these to state variables to actually pass them in the body
   const handleSearchFlights = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -20,11 +19,12 @@ const FlightBooking = ({ searchConfig, onShowResults, onBack }) => {
 
       const flightResults = await response.json();
       
+      // Pass the returned JSON up to App.js to switch the view
       if (onShowResults) {
         onShowResults(flightResults);
       }
     } catch (error) {
-      console.error("Error searching flights:", error);
+      console.error("Error fetching flight lists:", error);
       alert("Failed to reach flight lists API.");
     } finally {
       setLoading(false);
@@ -55,12 +55,12 @@ const FlightBooking = ({ searchConfig, onShowResults, onBack }) => {
           </datalist>
 
           <div className="input-group">
-            <input type="text" list="airport-list" className="search-input" placeholder="Departure Airport (Type to search)" required />
+            <input type="text" list="airport-list" className="search-input" placeholder="Departure Airport" required />
             <button type="button" className="clear-btn" onClick={clearInput}>×</button>
           </div>
 
           <div className="input-group">
-            <input type="text" list="airport-list" className="search-input" placeholder="Arrival Airport (Type to search)" required />
+            <input type="text" list="airport-list" className="search-input" placeholder="Arrival Airport" required />
             <button type="button" className="clear-btn" onClick={clearInput}>×</button>
           </div>
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './FlightResults.css';
 
-// Fallback data structure replicating the HTML design
+// Fallback data in case the API call fails or returns empty
 const FALLBACK_FLIGHTS = [
   {
     id: "f1",
@@ -12,22 +12,9 @@ const FALLBACK_FLIGHTS = [
     price: "$416.50",
     segments: [
       { depTime: "21:55 JFK", depCode: "New York T4", meta: "Boeing 787-9 | 12h 40m", arrTime: "19:35 AUH", arrCode: "Abu Dhabi TA" },
-      { depTime: "21:00 AUH", depCode: "Abu Dhabi TA", meta: "Boeing 737 Max 8 | Operated by Akasa Air", arrTime: "02:35 COK", arrCode: "Kochi T3", isLast: true }
+      { depTime: "21:00 AUH", depCode: "Abu Dhabi TA", meta: "Boeing 737 Max 8", arrTime: "02:35 COK", arrCode: "Kochi T3", isLast: true }
     ],
     layover: "1h 25m Layover in Abu Dhabi"
-  },
-  {
-    id: "f2",
-    airline: "Kuwait Airways (KU)",
-    timeRange: "16:55 - 00:35",
-    nextDay: "(+2d)",
-    durationStops: "21h 10m | 1 Stop (KWI)",
-    price: "$424.00",
-    segments: [
-      { depTime: "16:55 JFK", depCode: "New York T7", meta: "Boeing 777-300ER | 12h 10m", arrTime: "13:05 KWI", arrCode: "Kuwait T4" },
-      { depTime: "17:00 KWI", depCode: "Kuwait T4", meta: "Airbus A320neo | 5h 05m", arrTime: "00:35 COK", arrCode: "Kochi T3", isLast: true }
-    ],
-    layover: "3h 55m Layover in Kuwait"
   }
 ];
 
@@ -72,7 +59,7 @@ const FlightResults = ({ flights = FALLBACK_FLIGHTS, onBack, onSelectFlight }) =
             </div>
 
             <div className="card-details" onClick={(e) => e.stopPropagation()}>
-              {flight.segments.map((seg, sIdx) => (
+              {flight.segments && flight.segments.map((seg, sIdx) => (
                 <React.Fragment key={sIdx}>
                   <div className={`segment ${seg.isLast ? 'last-segment' : ''}`}>
                     <div className="dot"></div> 

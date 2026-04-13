@@ -63,9 +63,7 @@
   display: flex;
 }
 
-.clear-btn:hover {
-  color: #4a5568;
-}
+.clear-btn:hover { color: #4a5568; }
 
 .submit-btn {
   width: 50%;
@@ -84,16 +82,5 @@
 .submit-btn:active { transform: scale(0.98); }
 .submit-btn:disabled { background-color: #a0aec0; cursor: not-allowed; }
 
-.split-row {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-}
-
-.floating-label {
-  position: absolute;
-  font-size: 10px;
-  top: 4px;
-  left: 25px;
-  color: #a0aec0;
-}
+.split-row { display: flex; gap: 10px; width: 100%; }
+.floating-label { position: absolute; font-size: 10px; top: 4px; left: 25px; color: #a0aec0; }

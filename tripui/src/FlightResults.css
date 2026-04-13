@@ -25,10 +25,7 @@
   overflow: hidden;
   transition: box-shadow 0.2s;
 }
-
-.flight-card:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
+.flight-card:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
 
 .card-header {
   padding: 20px 25px;
@@ -38,7 +35,6 @@
   cursor: pointer;
   background-color: #ffffff;
 }
-
 .card-header:hover { background-color: #f7fafc; }
 
 .route-info { display: flex; flex-direction: column; gap: 5px; }
@@ -52,15 +48,9 @@
 
 .time-range { font-size: 18px; font-weight: bold; color: #2d3748; }
 .duration-stops { font-size: 12px; color: #a0aec0; }
-
 .price-action { text-align: right; }
 .price { font-size: 22px; font-weight: bold; color: #4a5568; display: block; }
-
-.expand-icon {
-  font-size: 14px; color: #a0aec0; margin-top: 5px;
-  transition: transform 0.3s ease; display: inline-block;
-}
-
+.expand-icon { font-size: 14px; color: #a0aec0; margin-top: 5px; transition: transform 0.3s ease; display: inline-block; }
 .flight-card.active .expand-icon { transform: rotate(180deg); }
 
 .card-details {
@@ -81,10 +71,7 @@
   padding-bottom: 20px;
 }
 
-.segment.last-segment {
-  border-left: none; 
-  padding-bottom: 0;
-}
+.segment.last-segment { border-left: none; padding-bottom: 0; }
 
 .dot {
   position: absolute;
@@ -98,7 +85,6 @@
   box-shadow: 0 0 0 1px #718096;
   z-index: 2;
 }
-
 .end-dot { top: auto; bottom: 0; }
 
 .segment-detail-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
@@ -120,8 +106,7 @@
 }
 
 .book-btn {
-  width: 100%; padding: 12px; margin-top: 20px;
-  background-color: #718096; color: white;
+  width: 100%; padding: 12px; margin-top: 20px; background-color: #718096; color: white;
   border: none; border-radius: 50px; font-weight: 600; cursor: pointer;
 }
 .book-btn:hover { background-color: #4a5568; }

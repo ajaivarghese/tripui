@@ -2,15 +2,23 @@
 import React, { useState } from 'react';
 import './App.css';
 import ItineraryList from './ItineraryList';
-import ItineraryTimeline from './ItineraryTimeline'; // <-- Import new component
+import ItineraryTimeline from './ItineraryTimeline';
+import FlightBooking from './FlightBooking'; // <-- Import new component
+import FlightResults from './FlightResult'; // <-- Import new component
 
 function App() {
+  // --- VIEW ROUTING STATE ---
+  // Controls which main component is visible: 'home' | 'timeline' | 'flightBooking' | 'flightResults'
+  const [currentView, setCurrentView] = useState('home');
+
+  // --- DATA STATES ---
   const [searchTerm, setSearchTerm] = useState('');
   const [itineraries, setItineraries] = useState([]);
-  
-  // New state to hold the detailed day-by-day JSON
   const [detailedViewData, setDetailedViewData] = useState(null); 
+  const [flightSearchConfig, setFlightSearchConfig] = useState(null); // Data for flight booking form
+  const [flightResultsData, setFlightResultsData] = useState(null); // Data for flight results list
   
+  // --- LOADING STATES ---
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailsLoading, setIsDetailsLoading] = useState(false);
 
@@ -18,7 +26,7 @@ function App() {
   const handleSearch = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setDetailedViewData(null); // Reset details view on new search
+    setDetailedViewData(null); // Reset details 
 
     try {
       const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/search', {
@@ -28,6 +36,7 @@ function App() {
       });
       const data = await response.json();
       setItineraries(data); 
+      setCurrentView('home');
     } catch (error) {
       console.error("Failed to fetch itineraries:", error);
     } finally {
@@ -48,6 +57,7 @@ function App() {
       
       const data = await response.json();
       setDetailedViewData(data.days); // Pass the "days" array to the timeline
+      setCurrentView('timeline'); // Switch view
     } catch (error) {
       console.error("Failed to fetch itinerary details:", error);
     } finally {
@@ -55,18 +65,20 @@ function App() {
     }
   };
 
+  // --- NAVIGATION HANDLERS ---
   const clearSearch = () => {
     setSearchTerm('');
   };
 
-  const handleBackToList = () => {
+  const handleBackToHome = () => {
     setDetailedViewData(null);
+    setCurrentView('home');
   };
 
   return (
     <div>
-      {/* Hide the search bar if we are looking at the detailed view */}
-      {!detailedViewData && (
+      {/* Hide the search bar if we are not on the home view */}
+      {currentView === 'home' && (
         <div className="search-container">
           <form className="search-form" onSubmit={handleSearch}>
             <div className="input-group">
@@ -89,24 +101,54 @@ function App() {
         </div>
       )}
 
-      {/* Conditional Rendering Logic */}
+      {/* Global Loading Indicator for Details */}
       {isDetailsLoading && <p style={{textAlign: 'center', marginTop: '40px'}}>Loading details...</p>}
 
-      {!isDetailsLoading && detailedViewData ? (
-        // Show Detailed Timeline View
+      {/* VIEW RENDERING LOGIC */}
+      
+      {!isDetailsLoading && currentView === 'home' && itineraries.length > 0 && (
+        <ItineraryList 
+          itineraries={itineraries} 
+          onViewDetails={fetchItineraryDetails} 
+        />
+      )}
+
+      {!isDetailsLoading && currentView === 'timeline' && detailedViewData && (
         <ItineraryTimeline 
           timelineData={detailedViewData} 
-          onBack={handleBackToList} 
+          onBack={handleBackToHome} 
+          onShowFlightSearch={(configData) => {
+            // Triggered when a flight card is clicked in ItineraryTimeline.js
+            setFlightSearchConfig(configData);
+            setCurrentView('flightBooking');
+          }}
         />
-      ) : (
-        // Show List View
-        itineraries.length > 0 && !isDetailsLoading && (
-          <ItineraryList 
-            itineraries={itineraries} 
-            onViewDetails={fetchItineraryDetails} 
-          />
-        )
       )}
+
+      {!isDetailsLoading && currentView === 'flightBooking' && (
+        <FlightBooking 
+          searchConfig={flightSearchConfig}
+          onBack={() => setCurrentView('timeline')}
+          onShowResults={(resultsData) => {
+            // Triggered when "Search Flights" is clicked in FlightBooking.js
+            setFlightResultsData(resultsData);
+            setCurrentView('flightResults');
+          }}
+        />
+      )}
+
+      {!isDetailsLoading && currentView === 'flightResults' && (
+        <FlightResults 
+          flights={flightResultsData}
+          onBack={() => setCurrentView('flightBooking')}
+          onSelectFlight={(flight) => {
+             // Handle what happens when they select a specific flight
+             console.log('Flight Selected:', flight);
+             alert(`You selected ${flight.airline}. Proceeding to Next Step...`);
+          }}
+        />
+      )}
+
     </div>
   );
 }
