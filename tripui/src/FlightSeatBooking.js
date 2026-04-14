@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import './FlightSeatBooking.css';
 
-const FlightSeatBooking = ({ seatData, maxSeats = 1, onBack }) => {
+const FlightSeatBooking = ({ seatData, maxSeats = 1, onBack, onConfirmSeatsFinal }) => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [showLimitMsg, setShowLimitMsg] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Generate a deterministic but pseudo-random seat map for UI demonstration
   const seatMap = useMemo(() => {
@@ -34,6 +35,50 @@ const FlightSeatBooking = ({ seatData, maxSeats = 1, onBack }) => {
       setSelectedSeats(selectedSeats.filter(id => id !== seatId));
     } else {
       setSelectedSeats([...selectedSeats, seatId]);
+    }
+  };
+
+  const handleConfirmClick = async () => {
+    setLoading(true);
+    try {
+      console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/flight/meals');
+      const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/flight/meals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          seats: selectedSeats,
+          // Include any other relevant data from seatData
+        })
+      });
+
+      let mealConfig = {};
+      if (response.ok) {
+        mealConfig = await response.json();
+      } else {
+        console.warn("API returned an error, using fallback meal config.");
+        // Fallback matching HTML structure: create an entry for each selected seat/passenger
+        const fallbackPassengers = selectedSeats.map((seat, index) => ({
+          id: `p${index + 1}`,
+          name: `Traveler ${index + 1} (${index === 0 ? 'Adult' : 'Child'})`
+        }));
+        mealConfig = { passengers: fallbackPassengers };
+      }
+
+      if (onConfirmSeatsFinal) {
+        onConfirmSeatsFinal(mealConfig);
+      }
+    } catch (error) {
+      console.error("Error confirming seats:", error);
+      // Fallback
+      const fallbackPassengers = selectedSeats.map((seat, index) => ({
+        id: `p${index + 1}`,
+        name: `Traveler ${index + 1}`
+      }));
+      if (onConfirmSeatsFinal) {
+        onConfirmSeatsFinal({ passengers: fallbackPassengers });
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,8 +129,8 @@ const FlightSeatBooking = ({ seatData, maxSeats = 1, onBack }) => {
 
           <div className="seat-legend">
             <div className="legend-item"><div className="legend-dot dot-avail"></div> Available</div>
-            <div className="legend-item"><div class="legend-dot dot-select"></div> Selected</div>
-            <div class="legend-item"><div class="legend-dot dot-occ">×</div> Occupied</div>
+            <div className="legend-item"><div className="legend-dot dot-select"></div> Selected</div>
+            <div className="legend-item"><div className="legend-dot dot-occ">×</div> Occupied</div>
           </div>
 
           <div className="scroll-viewport">
@@ -125,12 +170,14 @@ const FlightSeatBooking = ({ seatData, maxSeats = 1, onBack }) => {
             
             <button 
               className="confirm-seat-btn" 
-              disabled={selectedSeats.length !== maxSeats}
-              onClick={() => alert(`Seats ${selectedSeats.join(', ')} Confirmed! Booking Complete.`)}
+              disabled={selectedSeats.length !== maxSeats || loading}
+              onClick={handleConfirmClick}
             >
-              {selectedSeats.length === maxSeats 
-                ? `Confirm ${selectedSeats.length} Seat(s)` 
-                : `Select ${maxSeats - selectedSeats.length} more seat(s)`}
+              {loading 
+                ? 'Processing...' 
+                : (selectedSeats.length === maxSeats 
+                  ? `Confirm ${selectedSeats.length} Seat(s)` 
+                  : `Select ${maxSeats - selectedSeats.length} more seat(s)`)}
             </button>
           </div>
         </div>

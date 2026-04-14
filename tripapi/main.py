@@ -1,8 +1,10 @@
 # main.py
 import flight_booking_view
 import flight_list_view
-import flight_passenger_view  # --- NEW IMPORT ---
-import flight_seat_view  # --- NEW IMPORT ---
+import flight_meal_view  # --- NEW IMPORT ---
+import flight_passenger_view
+import flight_seat_view
+import flight_summary_view  # --- NEW IMPORT ---
 import itinerary_view
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,8 +25,10 @@ app.add_middleware(
 app.include_router(itinerary_view.router)
 app.include_router(flight_booking_view.router)
 app.include_router(flight_list_view.router)
-app.include_router(flight_passenger_view.router)  # --- NEW ROUTER ---
-app.include_router(flight_seat_view.router)  # --- NEW ROUTER ---
+app.include_router(flight_passenger_view.router)
+app.include_router(flight_seat_view.router)
+app.include_router(flight_meal_view.router)  # --- NEW ROUTER ---
+app.include_router(flight_summary_view.router)  # --- NEW ROUTER ---
 
 
 # --- Request Model for Search ---

@@ -1,4 +1,3 @@
-// App.js
 import React, { useState } from 'react';
 import './App.css';
 import ItineraryList from './ItineraryList';
@@ -7,11 +6,12 @@ import FlightBooking from './FlightBooking';
 import FlightResults from './FlightResults'; 
 import FlightPricePassenger from './FlightPricePassenger'; 
 import FlightSeatBooking from './FlightSeatBooking';       
+import FlightMealPreference from './FlightMealPreference'; 
 
 function App() {
   // --- VIEW ROUTING STATE ---
   // Controls which main component is visible: 
-  // 'home' | 'timeline' | 'flightBooking' | 'flightResults' | 'flightPricePassenger' | 'flightSeatBooking'
+  // 'home' | 'timeline' | 'flightBooking' | 'flightResults' | 'flightPricePassenger' | 'flightSeatBooking' | 'flightMealPreference'
   const [currentView, setCurrentView] = useState('home');
 
   // --- DATA STATES ---
@@ -26,7 +26,8 @@ function App() {
   const [passengerConfigData, setPassengerConfigData] = useState(null); 
   const [seatDataConfig, setSeatDataConfig] = useState(null); 
   const [passengerCount, setPassengerCount] = useState(1);
-  
+  const [mealConfigData, setMealConfigData] = useState(null); 
+
   // --- LOADING STATES ---
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailsLoading, setIsDetailsLoading] = useState(false);
@@ -48,6 +49,7 @@ function App() {
       setCurrentView('home');
     } catch (error) {
       console.error("Failed to fetch itineraries:", error);
+      alert("Failed to reach the search API. Please ensure the backend is running.");
     } finally {
       setIsLoading(false);
     }
@@ -69,6 +71,7 @@ function App() {
       setCurrentView('timeline'); 
     } catch (error) {
       console.error("Failed to fetch itinerary details:", error);
+      alert("Failed to load itinerary details.");
     } finally {
       setIsDetailsLoading(false);
     }
@@ -85,8 +88,8 @@ function App() {
   };
 
   return (
-    <div>
-      {/* Hide the search bar if we are not on the home view */}
+    <div className="app-wrapper">
+      {/* Search Bar - Only visible on the home view */}
       {currentView === 'home' && (
         <div className="search-container">
           <form className="search-form" onSubmit={handleSearch}>
@@ -94,7 +97,7 @@ function App() {
               <input 
                 type="text" 
                 className="search-input" 
-                placeholder="Search destinations..." 
+                placeholder="Search destinations (e.g., London, Tokyo)..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 required 
@@ -111,10 +114,15 @@ function App() {
       )}
 
       {/* Global Loading Indicator for Details */}
-      {isDetailsLoading && <p style={{textAlign: 'center', marginTop: '40px'}}>Loading details...</p>}
+      {isDetailsLoading && (
+        <div style={{display: 'flex', justifyContent: 'center', marginTop: '40px'}}>
+            <p style={{ color: '#718096', fontWeight: 'bold' }}>Loading details...</p>
+        </div>
+      )}
 
-      {/* VIEW RENDERING LOGIC */}
+      {/* --- VIEW RENDERING LOGIC --- */}
       
+      {/* 1. Trip List */}
       {!isDetailsLoading && currentView === 'home' && itineraries.length > 0 && (
         <ItineraryList 
           itineraries={itineraries} 
@@ -122,33 +130,39 @@ function App() {
         />
       )}
 
+      {/* 2. Trip Timeline */}
       {!isDetailsLoading && currentView === 'timeline' && detailedViewData && (
         <ItineraryTimeline 
           timelineData={detailedViewData} 
           onBack={handleBackToHome} 
           onShowFlightSearch={(configData) => {
+            // Triggered when a flight card is clicked in ItineraryTimeline.js
             setFlightSearchConfig(configData);
             setCurrentView('flightBooking');
           }}
         />
       )}
 
+      {/* 3. Flight Search Form */}
       {!isDetailsLoading && currentView === 'flightBooking' && (
         <FlightBooking 
           searchConfig={flightSearchConfig}
           onBack={() => setCurrentView('timeline')}
           onShowResults={(resultsData) => {
+            // Triggered when "Search Flights" is clicked in FlightBooking.js
             setFlightResultsData(resultsData);
             setCurrentView('flightResults');
           }}
         />
       )}
 
+      {/* 4. Flight Multi-List Results */}
       {!isDetailsLoading && currentView === 'flightResults' && (
         <FlightResults 
           flights={flightResultsData}
           onBack={() => setCurrentView('flightBooking')}
           onSelectFlight={(flight, passengerConfig) => {
+             // Triggered when "Select Flight" is clicked
              setSelectedFlightData(flight);
              setPassengerConfigData(passengerConfig);
              setCurrentView('flightPricePassenger');
@@ -156,12 +170,14 @@ function App() {
         />
       )}
 
+      {/* 5. Passenger Details & Price Checkout */}
       {!isDetailsLoading && currentView === 'flightPricePassenger' && (
         <FlightPricePassenger 
           flight={selectedFlightData}
           passengerConfig={passengerConfigData}
           onBack={() => setCurrentView('flightResults')}
           onConfirmSeats={(seatData, pCount) => {
+             // Transitions to Seat Booking when "Confirm & Pay" is clicked
              setSeatDataConfig(seatData);
              setPassengerCount(pCount);
              setCurrentView('flightSeatBooking');
@@ -169,11 +185,30 @@ function App() {
         />
       )}
 
+      {/* 6. Seat Selection */}
       {!isDetailsLoading && currentView === 'flightSeatBooking' && (
         <FlightSeatBooking 
           seatData={seatDataConfig}
           maxSeats={passengerCount}
           onBack={() => setCurrentView('flightPricePassenger')}
+          onConfirmSeatsFinal={(mealConfig) => {
+            // Transitions to Meal Preference when "Confirm Seat(s)" is clicked
+            setMealConfigData(mealConfig);
+            setCurrentView('flightMealPreference');
+          }}
+        />
+      )}
+
+      {/* 7. Meal Preferences */}
+      {!isDetailsLoading && currentView === 'flightMealPreference' && (
+        <FlightMealPreference 
+          mealConfig={mealConfigData}
+          onBack={() => setCurrentView('flightSeatBooking')}
+          onSavePreferences={(summaryData) => {
+             // Final action - show a success message and go back to the itinerary timeline
+             alert("Booking Complete! Your preferences have been saved.");
+             setCurrentView('timeline');
+          }}
         />
       )}
 
