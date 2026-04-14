@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
 import './App.css';
+
+// --- Components ---
 import ItineraryList from './ItineraryList';
 import ItineraryTimeline from './ItineraryTimeline';
 import FlightBooking from './FlightBooking'; 
 import FlightResults from './FlightResults'; 
 import FlightPricePassenger from './FlightPricePassenger'; 
 import FlightSeatBooking from './FlightSeatBooking';       
-import FlightMealPreference from './FlightMealPreference'; 
+import FlightMealPreference from './FlightMealPreference';
+import FlightSummary from './FlightSummary';
+import FlightConfirmation from './FlightConfirmation';
 
 function App() {
-  // --- VIEW ROUTING STATE ---
-  // Controls which main component is visible: 
-  // 'home' | 'timeline' | 'flightBooking' | 'flightResults' | 'flightPricePassenger' | 'flightSeatBooking' | 'flightMealPreference'
+  // ==========================================
+  // 1. STATE MANAGEMENT
+  // ==========================================
+  
+  // Controls which component is currently visible on the screen
   const [currentView, setCurrentView] = useState('home');
 
-  // --- DATA STATES ---
+  // Search & Itinerary Data
   const [searchTerm, setSearchTerm] = useState('');
   const [itineraries, setItineraries] = useState([]);
   const [detailedViewData, setDetailedViewData] = useState(null); 
   
-  // Flight & Booking States
+  // Flight Booking Flow Data
   const [flightSearchConfig, setFlightSearchConfig] = useState(null); 
   const [flightResultsData, setFlightResultsData] = useState(null); 
   const [selectedFlightData, setSelectedFlightData] = useState(null); 
@@ -27,12 +33,18 @@ function App() {
   const [seatDataConfig, setSeatDataConfig] = useState(null); 
   const [passengerCount, setPassengerCount] = useState(1);
   const [mealConfigData, setMealConfigData] = useState(null); 
+  const [summaryData, setSummaryData] = useState(null);
+  const [confirmationData, setConfirmationData] = useState(null);
 
-  // --- LOADING STATES ---
+  // Loading States
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailsLoading, setIsDetailsLoading] = useState(false);
 
-  // 1. Fetch the High-Level List (Home View)
+  // ==========================================
+  // 2. API CALLS & HANDLERS
+  // ==========================================
+
+  // Search for trips from the home page
   const handleSearch = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -49,13 +61,13 @@ function App() {
       setCurrentView('home');
     } catch (error) {
       console.error("Failed to fetch itineraries:", error);
-      alert("Failed to reach the search API. Please ensure the backend is running.");
+      alert("Failed to reach the search API. Please check your backend.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 2. Fetch the Detailed Timeline JSON (Timeline View)
+  // Fetch specific details for a selected trip
   const fetchItineraryDetails = async (tripId) => {
     setIsDetailsLoading(true);
 
@@ -67,7 +79,7 @@ function App() {
       });
       
       const data = await response.json();
-      setDetailedViewData(data.days); // Pass the "days" array to the timeline
+      setDetailedViewData(data.days); 
       setCurrentView('timeline'); 
     } catch (error) {
       console.error("Failed to fetch itinerary details:", error);
@@ -77,19 +89,20 @@ function App() {
     }
   };
 
-  // --- NAVIGATION HANDLERS ---
-  const clearSearch = () => {
-    setSearchTerm('');
-  };
-
+  const clearSearch = () => setSearchTerm('');
+  
   const handleBackToHome = () => {
     setDetailedViewData(null);
     setCurrentView('home');
   };
 
+  // ==========================================
+  // 3. RENDER UI
+  // ==========================================
   return (
     <div className="app-wrapper">
-      {/* Search Bar - Only visible on the home view */}
+      
+      {/* --- TOP SEARCH BAR (Only visible on Home) --- */}
       {currentView === 'home' && (
         <div className="search-container">
           <form className="search-form" onSubmit={handleSearch}>
@@ -107,20 +120,20 @@ function App() {
               )}
             </div>
             <button type="submit" className="submit-btn" disabled={isLoading}>
-              {isLoading ? 'Searching...' : 'Search'}
+              {isLoading ? 'Searching...' : 'Search Trips'}
             </button>
           </form>
         </div>
       )}
 
-      {/* Global Loading Indicator for Details */}
+      {/* Loading Indicator */}
       {isDetailsLoading && (
         <div style={{display: 'flex', justifyContent: 'center', marginTop: '40px'}}>
             <p style={{ color: '#718096', fontWeight: 'bold' }}>Loading details...</p>
         </div>
       )}
 
-      {/* --- VIEW RENDERING LOGIC --- */}
+      {/* --- VIEW ROUTING --- */}
       
       {/* 1. Trip List */}
       {!isDetailsLoading && currentView === 'home' && itineraries.length > 0 && (
@@ -136,7 +149,6 @@ function App() {
           timelineData={detailedViewData} 
           onBack={handleBackToHome} 
           onShowFlightSearch={(configData) => {
-            // Triggered when a flight card is clicked in ItineraryTimeline.js
             setFlightSearchConfig(configData);
             setCurrentView('flightBooking');
           }}
@@ -149,7 +161,6 @@ function App() {
           searchConfig={flightSearchConfig}
           onBack={() => setCurrentView('timeline')}
           onShowResults={(resultsData) => {
-            // Triggered when "Search Flights" is clicked in FlightBooking.js
             setFlightResultsData(resultsData);
             setCurrentView('flightResults');
           }}
@@ -162,7 +173,6 @@ function App() {
           flights={flightResultsData}
           onBack={() => setCurrentView('flightBooking')}
           onSelectFlight={(flight, passengerConfig) => {
-             // Triggered when "Select Flight" is clicked
              setSelectedFlightData(flight);
              setPassengerConfigData(passengerConfig);
              setCurrentView('flightPricePassenger');
@@ -170,14 +180,13 @@ function App() {
         />
       )}
 
-      {/* 5. Passenger Details & Price Checkout */}
+      {/* 5. Passenger Details & Checkout */}
       {!isDetailsLoading && currentView === 'flightPricePassenger' && (
         <FlightPricePassenger 
           flight={selectedFlightData}
           passengerConfig={passengerConfigData}
           onBack={() => setCurrentView('flightResults')}
           onConfirmSeats={(seatData, pCount) => {
-             // Transitions to Seat Booking when "Confirm & Pay" is clicked
              setSeatDataConfig(seatData);
              setPassengerCount(pCount);
              setCurrentView('flightSeatBooking');
@@ -192,7 +201,6 @@ function App() {
           maxSeats={passengerCount}
           onBack={() => setCurrentView('flightPricePassenger')}
           onConfirmSeatsFinal={(mealConfig) => {
-            // Transitions to Meal Preference when "Confirm Seat(s)" is clicked
             setMealConfigData(mealConfig);
             setCurrentView('flightMealPreference');
           }}
@@ -204,10 +212,33 @@ function App() {
         <FlightMealPreference 
           mealConfig={mealConfigData}
           onBack={() => setCurrentView('flightSeatBooking')}
-          onSavePreferences={(summaryData) => {
-             // Final action - show a success message and go back to the itinerary timeline
-             alert("Booking Complete! Your preferences have been saved.");
-             setCurrentView('timeline');
+          onSavePreferences={(summaryDataPayload) => {
+             setSummaryData(summaryDataPayload);
+             setCurrentView('flightSummary');
+          }}
+        />
+      )}
+
+      {/* 8. Booking Summary & Payment */}
+      {!isDetailsLoading && currentView === 'flightSummary' && (
+        <FlightSummary 
+          summaryData={summaryData}
+          onBack={() => setCurrentView('flightMealPreference')}
+          onPaymentSuccess={(confirmDataPayload) => {
+             setConfirmationData(confirmDataPayload);
+             setCurrentView('flightConfirmation');
+          }}
+        />
+      )}
+
+      {/* 9. Final Confirmation & PDF Download */}
+      {!isDetailsLoading && currentView === 'flightConfirmation' && (
+        <FlightConfirmation 
+          confirmationData={confirmationData}
+          summaryData={summaryData}
+          onHome={() => {
+             setDetailedViewData(null);
+             setCurrentView('home'); // Go back to dashboard/search
           }}
         />
       )}
