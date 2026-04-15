@@ -156,6 +156,11 @@
 .tag-stay { background-color: #fed7d7; color: #c53030; }
 .tag-activity { background-color: #c6f6d5; color: #276749; }
 .tag-adventure { background-color: #ffdaf0; color: #97266d; }
+.tag-train { background-color: #b2f5ea; color: #2c7a7b; }
+.tag-bus { background-color: #fefcbf; color: #744210; }
+.tag-rental { background-color: #edf2f7; color: #2d3748; }
+.tag-transport { background-color: #ebf8ff; color: #2a4365; }
+.tag-restaurant { background-color: #f1fbb3; color: #4f5b0e; }
 
 .event-details {
   font-size: 14px;
