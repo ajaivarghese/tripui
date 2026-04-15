@@ -98,8 +98,8 @@ MOCK_ITINERARY_DETAILS = {
                 },
                 {
                     "time": "09:30 PM",
-                    "icon": "✈️",
-                    "title": "Flight Home",
+                    "icon": "🚆",
+                    "title": "Train Home",
                     "tagClass": "tag-flight",
                     "tagLabel": "Flight",
                     "details": "<strong>Origin:</strong> LHR - London Heathrow<br><strong>Destination:</strong> JFK - New York",

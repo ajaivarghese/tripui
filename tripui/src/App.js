@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './App.css';
 
-// --- Components ---
+// --- Itinerary Components ---
 import ItineraryList from './ItineraryList';
 import ItineraryTimeline from './ItineraryTimeline';
+
+// --- Flight Components ---
 import FlightBooking from './FlightBooking'; 
 import FlightResults from './FlightResults'; 
 import FlightPricePassenger from './FlightPricePassenger'; 
@@ -12,12 +14,16 @@ import FlightMealPreference from './FlightMealPreference';
 import FlightSummary from './FlightSummary';
 import FlightConfirmation from './FlightConfirmation';
 
+// --- Train Components ---
+import TrainListMulti from './TrainListMulti';
+
 function App() {
   // ==========================================
   // 1. STATE MANAGEMENT
   // ==========================================
   
   // Controls which component is currently visible on the screen
+  // 'home' | 'timeline' | 'flightBooking' | 'flightResults' | 'flightPricePassenger' | 'flightSeatBooking' | 'flightMealPreference' | 'flightSummary' | 'flightConfirmation' | 'trainList'
   const [currentView, setCurrentView] = useState('home');
 
   // Search & Itinerary Data
@@ -35,6 +41,9 @@ function App() {
   const [mealConfigData, setMealConfigData] = useState(null); 
   const [summaryData, setSummaryData] = useState(null);
   const [confirmationData, setConfirmationData] = useState(null);
+
+  // Train Booking Flow Data
+  const [trainListData, setTrainListData] = useState(null);
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -152,6 +161,10 @@ function App() {
             setFlightSearchConfig(configData);
             setCurrentView('flightBooking');
           }}
+          onShowTrainList={(trainData) => {
+            setTrainListData(trainData);
+            setCurrentView('trainList');
+          }}
         />
       )}
 
@@ -238,7 +251,20 @@ function App() {
           summaryData={summaryData}
           onHome={() => {
              setDetailedViewData(null);
-             setCurrentView('home'); // Go back to dashboard/search
+             setCurrentView('home'); 
+          }}
+        />
+      )}
+
+      {/* 10. Train Multi-List Results */}
+      {!isDetailsLoading && currentView === 'trainList' && (
+        <TrainListMulti 
+          trainData={trainListData}
+          onBack={() => setCurrentView('timeline')}
+          onSelectTrain={(train, selectedClass) => {
+             // Future expansion: transition to train passenger form
+             console.log("Selected Train:", train.name, "Class:", selectedClass.name);
+             alert(`You selected ${train.name} (${selectedClass.name}).`);
           }}
         />
       )}

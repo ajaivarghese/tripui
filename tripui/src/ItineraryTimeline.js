@@ -1,7 +1,8 @@
+// ItineraryTimeline.js
 import React, { useState } from 'react';
 import './ItineraryTimeline.css';
 
-const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch }) => {
+const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch, onShowTrainList }) => {
   const [expandedDays, setExpandedDays] = useState(
     timelineData ? timelineData.reduce((acc, day) => ({ ...acc, [day.dayId]: true }), {}) : {}
   );
@@ -19,29 +20,51 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
   };
 
   const handleEventClick = async (event) => {
-    // Detect if the event is a flight based on title or icon
-    const isFlight = event.title.toLowerCase().includes('flight') || event.icon === '✈️';
+    const titleLower = event.title.toLowerCase();
+    const isFlight = titleLower.includes('flight') || event.icon === '✈️';
+    const isTrain = titleLower.includes('train') || event.icon === '🚆';
 
     if (isFlight) {
       setLoadingEventId(event.id || event.title);
       try {
         console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/flights/search');
-        
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/flights/search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ eventId: event.id, title: event.title })
         });
-        
         const searchConfigData = await response.json();
-        
-        // Callback to App.js to switch view
-        if (onShowFlightSearch) {
-          onShowFlightSearch(searchConfigData);
-        }
+        if (onShowFlightSearch) onShowFlightSearch(searchConfigData);
       } catch (error) {
         console.error("Error initiating flight search:", error);
         alert("Failed to reach flight search API.");
+      } finally {
+        setLoadingEventId(null);
+      }
+    } else if (isTrain) {
+      // --- NEW TRAIN LOGIC ---
+      setLoadingEventId(event.id || event.title);
+      try {
+        console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/train/lists');
+        const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/train/lists', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId: event.id, title: event.title })
+        });
+        
+        let trainListData = null;
+        if(response.ok) {
+           trainListData = await response.json();
+        }
+        
+        // Pass data to parent to switch view to TrainList
+        if (onShowTrainList) onShowTrainList(trainListData);
+
+      } catch (error) {
+        console.error("Error initiating train search:", error);
+        alert("Failed to reach train list API. Loading default data.");
+        // Fallback for demonstration
+        if (onShowTrainList) onShowTrainList(null); 
       } finally {
         setLoadingEventId(null);
       }
