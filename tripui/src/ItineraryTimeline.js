@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './ItineraryTimeline.css';
 
-const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch, onShowTrainList }) => {
+const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch, onShowTrainList, onShowBusList }) => {
   const [expandedDays, setExpandedDays] = useState(
     timelineData ? timelineData.reduce((acc, day) => ({ ...acc, [day.dayId]: true }), {}) : {}
   );
@@ -23,6 +23,7 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
     const titleLower = event.title.toLowerCase();
     const isFlight = titleLower.includes('flight') || event.icon === '✈️';
     const isTrain = titleLower.includes('train') || event.icon === '🚆';
+    const isBus = titleLower.includes('bus') || event.icon === '🚌'; // --- NEW BUS LOGIC ---
 
     if (isFlight) {
       setLoadingEventId(event.id || event.title);
@@ -42,7 +43,6 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
         setLoadingEventId(null);
       }
     } else if (isTrain) {
-      // --- NEW TRAIN LOGIC ---
       setLoadingEventId(event.id || event.title);
       try {
         console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/train/lists');
@@ -57,14 +57,37 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
            trainListData = await response.json();
         }
         
-        // Pass data to parent to switch view to TrainList
         if (onShowTrainList) onShowTrainList(trainListData);
 
       } catch (error) {
         console.error("Error initiating train search:", error);
         alert("Failed to reach train list API. Loading default data.");
-        // Fallback for demonstration
         if (onShowTrainList) onShowTrainList(null); 
+      } finally {
+        setLoadingEventId(null);
+      }
+    } else if (isBus) {
+      // --- NEW BUS API CALL ---
+      setLoadingEventId(event.id || event.title);
+      try {
+        console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/bus/lists');
+        const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/bus/lists', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId: event.id, title: event.title })
+        });
+        
+        let busListData = null;
+        if(response.ok) {
+           busListData = await response.json();
+        }
+        
+        if (onShowBusList) onShowBusList(busListData);
+
+      } catch (error) {
+        console.error("Error initiating bus search:", error);
+        alert("Failed to reach bus list API. Loading default data.");
+        if (onShowBusList) onShowBusList(null); 
       } finally {
         setLoadingEventId(null);
       }

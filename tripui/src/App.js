@@ -14,8 +14,9 @@ import FlightMealPreference from './FlightMealPreference';
 import FlightSummary from './FlightSummary';
 import FlightConfirmation from './FlightConfirmation';
 
-// --- Train Components ---
+// --- Train & Bus Components ---
 import TrainListMulti from './TrainListMulti';
+import BusListMulti from './BusListMulti'; // --- NEW IMPORT ---
 
 function App() {
   // ==========================================
@@ -23,7 +24,7 @@ function App() {
   // ==========================================
   
   // Controls which component is currently visible on the screen
-  // 'home' | 'timeline' | 'flightBooking' | 'flightResults' | 'flightPricePassenger' | 'flightSeatBooking' | 'flightMealPreference' | 'flightSummary' | 'flightConfirmation' | 'trainList'
+  // Added 'busList' to available views
   const [currentView, setCurrentView] = useState('home');
 
   // Search & Itinerary Data
@@ -42,8 +43,9 @@ function App() {
   const [summaryData, setSummaryData] = useState(null);
   const [confirmationData, setConfirmationData] = useState(null);
 
-  // Train Booking Flow Data
+  // Surface Transport Flow Data
   const [trainListData, setTrainListData] = useState(null);
+  const [busListData, setBusListData] = useState(null); // --- NEW STATE ---
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +55,6 @@ function App() {
   // 2. API CALLS & HANDLERS
   // ==========================================
 
-  // Search for trips from the home page
   const handleSearch = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -76,7 +77,6 @@ function App() {
     }
   };
 
-  // Fetch specific details for a selected trip
   const fetchItineraryDetails = async (tripId) => {
     setIsDetailsLoading(true);
 
@@ -111,7 +111,6 @@ function App() {
   return (
     <div className="app-wrapper">
       
-      {/* --- TOP SEARCH BAR (Only visible on Home) --- */}
       {currentView === 'home' && (
         <div className="search-container">
           <form className="search-form" onSubmit={handleSearch}>
@@ -135,14 +134,11 @@ function App() {
         </div>
       )}
 
-      {/* Loading Indicator */}
       {isDetailsLoading && (
         <div style={{display: 'flex', justifyContent: 'center', marginTop: '40px'}}>
             <p style={{ color: '#718096', fontWeight: 'bold' }}>Loading details...</p>
         </div>
       )}
-
-      {/* --- VIEW ROUTING --- */}
       
       {/* 1. Trip List */}
       {!isDetailsLoading && currentView === 'home' && itineraries.length > 0 && (
@@ -164,6 +160,11 @@ function App() {
           onShowTrainList={(trainData) => {
             setTrainListData(trainData);
             setCurrentView('trainList');
+          }}
+          onShowBusList={(busData) => {
+            // --- NEW: Handle Bus Listing View Transition ---
+            setBusListData(busData);
+            setCurrentView('busList');
           }}
         />
       )}
@@ -256,15 +257,26 @@ function App() {
         />
       )}
 
-      {/* 10. Train Multi-List Results */}
+      {/* 10. Train List View */}
       {!isDetailsLoading && currentView === 'trainList' && (
         <TrainListMulti 
           trainData={trainListData}
           onBack={() => setCurrentView('timeline')}
           onSelectTrain={(train, selectedClass) => {
-             // Future expansion: transition to train passenger form
              console.log("Selected Train:", train.name, "Class:", selectedClass.name);
              alert(`You selected ${train.name} (${selectedClass.name}).`);
+          }}
+        />
+      )}
+
+      {/* 11. Bus List View */}
+      {!isDetailsLoading && currentView === 'busList' && (
+        <BusListMulti 
+          busData={busListData}
+          onBack={() => setCurrentView('timeline')}
+          onSelectBus={(bus) => {
+             console.log("Selected Bus:", bus.operator);
+             alert(`You selected the ${bus.operator} bus. Proceeding to Passenger Details...`);
           }}
         />
       )}

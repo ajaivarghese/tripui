@@ -1,0 +1,59 @@
+/* BusListMulti.css */
+.bus-list-wrapper { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; margin: 0; color: #4a5568; padding-bottom: 60px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+.bus-container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px; }
+
+.header-title { color: #2d3748; margin-bottom: 25px; font-size: 26px; }
+
+/* Route Card */
+.route-card { display: flex; justify-content: space-between; align-items: center; width: 100%; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 15px; padding: 20px 30px; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); box-sizing: border-box; }
+.route-point { display: flex; flex-direction: column; gap: 4px; }
+.route-label { font-size: 11px; font-weight: 700; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; }
+.route-value { font-size: 16px; font-weight: 700; color: #2d3748; }
+.route-arrow { font-size: 20px; color: #cbd5e0; }
+.divider { width: 1px; height: 40px; background-color: #e2e8f0; }
+
+@media (max-width: 600px) {
+  .route-card { flex-wrap: wrap; gap: 15px; }
+  .divider { display: none; }
+  .route-point { width: 45%; }
+}
+
+/* Search */
+.search-wrapper { position: relative; width: 100%; margin-bottom: 30px; }
+.search-input { width: 100%; padding: 15px 50px 15px 25px; font-size: 16px; color: #4a5568; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 50px; outline: none; box-sizing: border-box; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.2s; }
+.search-input:focus { border-color: #cbd5e0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+.search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #a0aec0; pointer-events: none; }
+
+/* Bus List */
+.bus-card { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05); transition: transform 0.2s; overflow: hidden; display: flex; flex-direction: column; margin-bottom: 20px; }
+.bus-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #cbd5e0; }
+
+/* Header */
+.card-header { padding: 20px 25px 15px 25px; border-bottom: 1px dashed #e2e8f0; display: flex; justify-content: space-between; align-items: flex-start; }
+.op-name { font-size: 18px; font-weight: 700; color: #2d3748; margin-bottom: 4px; }
+.bus-type { font-size: 12px; color: #718096; background: #f7fafc; padding: 2px 8px; border-radius: 4px; border: 1px solid #edf2f7; display: inline-block;}
+.rating-badge { background-color: #f0fff4; color: #276749; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 13px; display: flex; gap: 4px; }
+
+/* Body */
+.card-body { padding: 20px 25px; display: flex; align-items: center; justify-content: space-between; }
+.time-col { display: flex; flex-direction: column; }
+.time-val { font-size: 20px; font-weight: 700; color: #2d3748; }
+.loc-val { font-size: 13px; color: #718096; margin-top: 2px; font-weight: 500; max-width: 120px; }
+.duration-col { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding: 0 20px; }
+.dur-val { font-size: 12px; color: #a0aec0; margin-bottom: 5px; }
+.dur-line { width: 100%; height: 2px; background-color: #cbd5e0; position: relative; }
+.dur-line::after { content: '🚌'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-size: 14px; background: white; padding: 0 5px; }
+
+/* Amenities */
+.amenity-row { padding: 0 25px 15px 25px; display: flex; gap: 10px; flex-wrap: wrap; }
+.amenity-tag { font-size: 11px; color: #718096; background: #edf2f7; padding: 3px 8px; border-radius: 4px; }
+
+/* Footer */
+.card-footer { background-color: #f9fafb; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+.price-col { display: flex; flex-direction: column; }
+.price-val { font-size: 22px; font-weight: 800; color: #2d3748; }
+.seat-count { font-size: 11px; color: #e53e3e; font-weight: 600; }
+.select-btn { background-color: #718096; color: white; border: none; padding: 10px 25px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
+.select-btn:hover { background-color: #4a5568; }
+
+.no-results { text-align: center; color: #a0aec0; margin-top: 40px; width: 100%; display: block; }

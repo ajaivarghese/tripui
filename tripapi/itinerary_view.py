@@ -97,6 +97,14 @@ MOCK_ITINERARY_DETAILS = {
                     "details": "Return transfer from Valley View Lodge to LHR.",
                 },
                 {
+                    "time": "07:30 PM",
+                    "icon": "🚆",
+                    "title": "Bus Home",
+                    "tagClass": "tag-bus",
+                    "tagLabel": "Bus",
+                    "details": "<strong>Origin:</strong> LHR - London Heathrow<br><strong>Destination:</strong> MUC - Germany",
+                },
+                {
                     "time": "09:30 PM",
                     "icon": "🚆",
                     "title": "Train Home",
