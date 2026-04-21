@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './ItineraryTimeline.css';
 
-const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch, onShowTrainList, onShowBusList }) => {
+const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch, onShowTrainList, onShowBusList, onShowTaxiList }) => {
   const [expandedDays, setExpandedDays] = useState(
     timelineData ? timelineData.reduce((acc, day) => ({ ...acc, [day.dayId]: true }), {}) : {}
   );
@@ -23,7 +23,8 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
     const titleLower = event.title.toLowerCase();
     const isFlight = titleLower.includes('flight') || event.icon === '✈️';
     const isTrain = titleLower.includes('train') || event.icon === '🚆';
-    const isBus = titleLower.includes('bus') || event.icon === '🚌'; // --- NEW BUS LOGIC ---
+    const isBus = titleLower.includes('bus') || event.icon === '🚌'; 
+    const isTaxi = titleLower.includes('taxi') || titleLower.includes('transfer') || event.icon === '🚖'; // --- NEW TAXI LOGIC ---
 
     if (isFlight) {
       setLoadingEventId(event.id || event.title);
@@ -67,7 +68,6 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
         setLoadingEventId(null);
       }
     } else if (isBus) {
-      // --- NEW BUS API CALL ---
       setLoadingEventId(event.id || event.title);
       try {
         console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/bus/lists');
@@ -88,6 +88,31 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
         console.error("Error initiating bus search:", error);
         alert("Failed to reach bus list API. Loading default data.");
         if (onShowBusList) onShowBusList(null); 
+      } finally {
+        setLoadingEventId(null);
+      }
+    } else if (isTaxi) {
+      // --- NEW TAXI API CALL ---
+      setLoadingEventId(event.id || event.title);
+      try {
+        console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/taxi/list');
+        const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/taxi/list', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId: event.id, title: event.title })
+        });
+        
+        let taxiListData = null;
+        if(response.ok) {
+           taxiListData = await response.json();
+        }
+        
+        if (onShowTaxiList) onShowTaxiList(taxiListData);
+
+      } catch (error) {
+        console.error("Error initiating taxi search:", error);
+        alert("Failed to reach taxi list API. Loading default data.");
+        if (onShowTaxiList) onShowTaxiList(null); 
       } finally {
         setLoadingEventId(null);
       }

@@ -1,0 +1,61 @@
+/* TaxiListMulti.css */
+.taxi-list-wrapper { font-family: sans-serif; background-color: #f0f2f5; margin: 0; color: #4a5568; padding-bottom: 60px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+.taxi-container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 20px; }
+
+.header-title { color: #2d3748; margin-bottom: 25px; font-size: 26px; }
+
+/* Route Summary Card */
+.route-card { display: flex; justify-content: space-between; align-items: center; width: 100%; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 15px; padding: 20px 30px; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); flex-wrap: wrap; gap: 15px; box-sizing: border-box; }
+.route-section { display: flex; align-items: center; gap: 20px; flex-grow: 1; }
+.route-point { display: flex; flex-direction: column; gap: 4px; }
+.route-label { font-size: 11px; font-weight: 700; color: #a0aec0; text-transform: uppercase; letter-spacing: 0.5px; }
+.route-value { font-size: 16px; font-weight: 700; color: #2d3748; }
+.route-arrow { font-size: 20px; color: #cbd5e0; }
+.divider { width: 1px; height: 40px; background-color: #e2e8f0; }
+.time-value { font-size: 18px; font-weight: 800; color: #2d3748; display: flex; align-items: center; gap: 5px; }
+
+@media (max-width: 600px) {
+  .route-card { flex-direction: column; align-items: flex-start; }
+  .route-section { width: 100%; justify-content: space-between; }
+  .divider { display: none; } 
+  .route-point { width: 100%; }
+  .route-arrow { transform: rotate(90deg); align-self: center; margin: 5px 0; }
+}
+
+/* Search Bar */
+.search-wrapper { position: relative; width: 100%; margin-bottom: 30px; }
+.search-input { width: 100%; padding: 15px 50px 15px 25px; font-size: 16px; color: #4a5568; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 50px; outline: none; box-sizing: border-box; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.2s; }
+.search-input:focus { border-color: #cbd5e0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+.search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #a0aec0; pointer-events: none; }
+
+/* Taxi List */
+.taxi-list { width: 100%; display: flex; flex-direction: column; gap: 15px; }
+
+.taxi-card { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05); transition: transform 0.2s; overflow: hidden; display: flex; align-items: center; padding: 25px; gap: 20px; }
+.taxi-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #cbd5e0; }
+
+.taxi-info { flex-grow: 1; display: flex; flex-direction: column; gap: 6px; }
+.provider-row { display: flex; align-items: center; gap: 8px; }
+.provider-name { font-weight: 700; font-size: 18px; color: #2d3748; }
+.rating-badge { background-color: #fffff0; color: #d69e2e; border: 1px solid #fefcbf; font-size: 12px; padding: 2px 6px; border-radius: 6px; font-weight: 600; }
+.vehicle-details { font-size: 14px; color: #718096; }
+.capacity-row { display: flex; gap: 10px; margin-top: 4px; }
+.cap-badge { font-size: 12px; background-color: #edf2f7; color: #4a5568; padding: 4px 10px; border-radius: 50px; display: flex; align-items: center; gap: 5px; font-weight: 500; }
+
+.taxi-time { display: flex; flex-direction: column; align-items: flex-end; min-width: 80px; text-align: right; }
+.duration-lbl { font-size: 13px; font-weight: 600; color: #718096; }
+
+.taxi-action { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; border-left: 1px solid #e2e8f0; padding-left: 20px; min-width: 100px; }
+.price { font-size: 22px; font-weight: 800; color: #2d3748; }
+
+/* Book Button */
+.book-btn { background-color: #718096; color: white; border: none; padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; white-space: nowrap; }
+.book-btn:hover { background-color: #4a5568; }
+
+@media (max-width: 600px) {
+  .taxi-card { flex-wrap: wrap; }
+  .taxi-action { width: 100%; border-left: none; padding-left: 0; border-top: 1px dashed #e2e8f0; padding-top: 15px; flex-direction: row; justify-content: space-between; align-items: center; }
+  .taxi-time { display: none; } 
+}
+
+.no-results { text-align: center; color: #a0aec0; margin-top: 40px; width: 100%; }

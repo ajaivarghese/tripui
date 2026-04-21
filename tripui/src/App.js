@@ -14,9 +14,10 @@ import FlightMealPreference from './FlightMealPreference';
 import FlightSummary from './FlightSummary';
 import FlightConfirmation from './FlightConfirmation';
 
-// --- Train & Bus Components ---
+// --- Surface Transport Components ---
 import TrainListMulti from './TrainListMulti';
-import BusListMulti from './BusListMulti'; // --- NEW IMPORT ---
+import BusListMulti from './BusListMulti'; 
+import TaxiListMulti from './TaxiListMulti'; // --- NEW IMPORT ---
 
 function App() {
   // ==========================================
@@ -24,7 +25,7 @@ function App() {
   // ==========================================
   
   // Controls which component is currently visible on the screen
-  // Added 'busList' to available views
+  // Added 'taxiList' to available views
   const [currentView, setCurrentView] = useState('home');
 
   // Search & Itinerary Data
@@ -45,7 +46,8 @@ function App() {
 
   // Surface Transport Flow Data
   const [trainListData, setTrainListData] = useState(null);
-  const [busListData, setBusListData] = useState(null); // --- NEW STATE ---
+  const [busListData, setBusListData] = useState(null); 
+  const [taxiListData, setTaxiListData] = useState(null); // --- NEW STATE ---
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -162,9 +164,13 @@ function App() {
             setCurrentView('trainList');
           }}
           onShowBusList={(busData) => {
-            // --- NEW: Handle Bus Listing View Transition ---
             setBusListData(busData);
             setCurrentView('busList');
+          }}
+          onShowTaxiList={(taxiData) => {
+            // --- NEW: Handle Taxi View Transition ---
+            setTaxiListData(taxiData);
+            setCurrentView('taxiList');
           }}
         />
       )}
@@ -277,6 +283,18 @@ function App() {
           onSelectBus={(bus) => {
              console.log("Selected Bus:", bus.operator);
              alert(`You selected the ${bus.operator} bus. Proceeding to Passenger Details...`);
+          }}
+        />
+      )}
+
+      {/* 12. Taxi List View */}
+      {!isDetailsLoading && currentView === 'taxiList' && (
+        <TaxiListMulti 
+          taxiData={taxiListData}
+          onBack={() => setCurrentView('timeline')}
+          onSelectTaxi={(taxi) => {
+             console.log("Selected Taxi:", taxi.provider);
+             alert(`You selected a ${taxi.type} from ${taxi.provider}. Proceeding to checkout...`);
           }}
         />
       )}
