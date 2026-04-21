@@ -98,7 +98,7 @@ MOCK_ITINERARY_DETAILS = {
                 },
                 {
                     "time": "07:30 PM",
-                    "icon": "🚆",
+                    "icon": "🚌",
                     "title": "Bus Home",
                     "tagClass": "tag-bus",
                     "tagLabel": "Bus",
