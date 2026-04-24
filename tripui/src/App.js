@@ -21,6 +21,8 @@ import TaxiListMulti from './TaxiListMulti';
 
 // --- NEW IMPORT ---
 import RentalBooking from './RentalBooking'; 
+import MultiTransportList from './MultiTransportList';
+
 
 function App() {
   // ==========================================
@@ -48,6 +50,7 @@ function App() {
   const [busListData, setBusListData] = useState(null); 
   const [taxiListData, setTaxiListData] = useState(null); 
   const [rentalListData, setRentalListData] = useState(null); // --- NEW STATE ---
+  const [multiTransportData, setMultiTransportData] = useState(null);
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -172,9 +175,12 @@ function App() {
             setCurrentView('taxiList');
           }}
           onShowRentalList={(rentalData) => {
-            // --- NEW: Handle Rental View Transition ---
             setRentalListData(rentalData);
             setCurrentView('rentalList');
+          }}
+          onShowMultiList={(multiData) => {
+            setMultiTransportData(multiData);
+            setCurrentView('multiTransportList');
           }}
         />
       )}
@@ -217,6 +223,14 @@ function App() {
       {!isDetailsLoading && currentView === 'rentalList' && (
         <RentalBooking 
           rentalData={rentalListData}
+          onBack={() => setCurrentView('timeline')}
+        />
+      )}
+
+      {/* 14. Multi Transport List View (NEW) */}
+      {!isDetailsLoading && currentView === 'multiTransportList' && (
+        <MultiTransportList 
+          transportData={multiTransportData}
           onBack={() => setCurrentView('timeline')}
         />
       )}

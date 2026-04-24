@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ItineraryTimeline.css';
 
-const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch, onShowTrainList, onShowBusList, onShowTaxiList, onShowRentalList }) => {
+const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch, onShowTrainList, onShowBusList, onShowTaxiList, onShowRentalList, onShowMultiList }) => {
   const [expandedDays, setExpandedDays] = useState(
     timelineData ? timelineData.reduce((acc, day) => ({ ...acc, [day.dayId]: true }), {}) : {}
   );
@@ -21,7 +21,8 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
     const isTrain = titleLower.includes('train') || event.icon === '🚆';
     const isBus = titleLower.includes('bus') || event.icon === '🚌'; 
     const isTaxi = titleLower.includes('taxi') || titleLower.includes('transfer') || event.icon === '🚖';
-    const isRental = titleLower.includes('rental') || titleLower.includes('car') || event.icon === '🚗'; // --- NEW CHECK ---
+    const isRental = titleLower.includes('rental') || titleLower.includes('car') || event.icon === '🚗';
+    const isMulti = titleLower.includes('multi');
 
     if (isFlight) {
       // ... existing flight logic ...
@@ -84,6 +85,32 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
         console.error("Error initiating rental search:", error);
         alert("Failed to reach rental list API.");
         if (onShowRentalList) onShowRentalList(null); 
+      } finally {
+        setLoadingEventId(null);
+      }
+    } else if (isMulti) {
+      // --- NEW: Multi Transport API Call ---
+      setLoadingEventId(event.id || event.title);
+      try {
+        const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/transport/list', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId: event.id, title: event.title })
+        });
+        
+        let multiData = null;
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            multiData = await response.json();
+        } else {
+            multiData = await response.text();
+        }
+
+        if (onShowMultiList) onShowMultiList(multiData);
+      } catch (error) {
+        console.error("Error initiating multi transport search:", error);
+        alert("Failed to reach multi transport list API.");
+        if (onShowMultiList) onShowMultiList(null); 
       } finally {
         setLoadingEventId(null);
       }

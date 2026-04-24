@@ -106,10 +106,10 @@ MOCK_ITINERARY_DETAILS = {
                 },
                 {
                     "time": "07:00 PM",
-                    "icon": "🚌",
-                    "title": "Transport Home",
+                    "icon": "",
+                    "title": "Multi Transport Home",
                     "tagClass": "tag-transport",
-                    "tagLabel": "Transport",
+                    "tagLabel": "Multi Transport",
                     "details": "<strong>Origin:</strong> Amsterdam<br><strong>Destination:</strong> Paris",
                 },
                 {
