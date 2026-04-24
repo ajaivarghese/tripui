@@ -1,5 +1,5 @@
 # main.py
-import bus_list_view 
+import bus_list_view
 import flight_booking_view
 import flight_list_view
 import flight_meal_view
@@ -7,9 +7,9 @@ import flight_passenger_view
 import flight_seat_view
 import flight_summary_view
 import itinerary_view
+import rental_vehicle_view  # --- NEW IMPORT ---
+import taxi_list_view
 import train_list_view
-import taxi_list_view      # --- NEW IMPORT ---
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -35,7 +35,8 @@ app.include_router(flight_meal_view.router)
 app.include_router(flight_summary_view.router)
 app.include_router(train_list_view.router)
 app.include_router(bus_list_view.router)
-app.include_router(taxi_list_view.router)   # --- NEW ROUTER ---
+app.include_router(taxi_list_view.router)
+app.include_router(rental_vehicle_view.router)  # --- NEW ROUTER ---
 
 
 # --- Request Model for Search ---
