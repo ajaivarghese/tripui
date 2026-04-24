@@ -1,4 +1,3 @@
-// ItineraryTimeline.js
 import React, { useState } from 'react';
 import './ItineraryTimeline.css';
 
@@ -24,12 +23,11 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
     const isFlight = titleLower.includes('flight') || event.icon === '✈️';
     const isTrain = titleLower.includes('train') || event.icon === '🚆';
     const isBus = titleLower.includes('bus') || event.icon === '🚌'; 
-    const isTaxi = titleLower.includes('taxi') || titleLower.includes('transfer') || event.icon === '🚖'; // --- NEW TAXI LOGIC ---
+    const isTaxi = titleLower.includes('taxi') || titleLower.includes('transfer') || event.icon === '🚖';
 
     if (isFlight) {
       setLoadingEventId(event.id || event.title);
       try {
-        console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/flights/search');
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/flights/search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -46,23 +44,17 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
     } else if (isTrain) {
       setLoadingEventId(event.id || event.title);
       try {
-        console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/train/lists');
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/train/lists', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ eventId: event.id, title: event.title })
         });
-        
         let trainListData = null;
-        if(response.ok) {
-           trainListData = await response.json();
-        }
-        
+        if(response.ok) trainListData = await response.json();
         if (onShowTrainList) onShowTrainList(trainListData);
-
       } catch (error) {
         console.error("Error initiating train search:", error);
-        alert("Failed to reach train list API. Loading default data.");
+        alert("Failed to reach train list API.");
         if (onShowTrainList) onShowTrainList(null); 
       } finally {
         setLoadingEventId(null);
@@ -70,48 +62,37 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
     } else if (isBus) {
       setLoadingEventId(event.id || event.title);
       try {
-        console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/bus/lists');
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/bus/lists', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ eventId: event.id, title: event.title })
         });
-        
         let busListData = null;
-        if(response.ok) {
-           busListData = await response.json();
-        }
-        
+        if(response.ok) busListData = await response.json();
         if (onShowBusList) onShowBusList(busListData);
-
       } catch (error) {
         console.error("Error initiating bus search:", error);
-        alert("Failed to reach bus list API. Loading default data.");
+        alert("Failed to reach bus list API.");
         if (onShowBusList) onShowBusList(null); 
       } finally {
         setLoadingEventId(null);
       }
     } else if (isTaxi) {
-      // --- NEW TAXI API CALL ---
+      // --- TAXI API CALL ---
       setLoadingEventId(event.id || event.title);
       try {
-        console.log('POST to https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/taxi/list');
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/taxi/list', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ eventId: event.id, title: event.title })
         });
-        
         let taxiListData = null;
-        if(response.ok) {
-           taxiListData = await response.json();
-        }
+        if(response.ok) taxiListData = await response.json();
         
         if (onShowTaxiList) onShowTaxiList(taxiListData);
-
       } catch (error) {
         console.error("Error initiating taxi search:", error);
-        alert("Failed to reach taxi list API. Loading default data.");
+        alert("Failed to reach taxi list API.");
         if (onShowTaxiList) onShowTaxiList(null); 
       } finally {
         setLoadingEventId(null);
@@ -140,7 +121,6 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
             <div className="events-list">
               {day.events.map((event, index) => {
                 const isLoading = loadingEventId === (event.id || event.title);
-                
                 return (
                   <div 
                     className="event-item" 
