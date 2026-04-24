@@ -17,18 +17,17 @@ import FlightConfirmation from './FlightConfirmation';
 // --- Surface Transport Components ---
 import TrainListMulti from './TrainListMulti';
 import BusListMulti from './BusListMulti'; 
-import TaxiListMulti from './TaxiListMulti'; // --- NEW IMPORT ---
+import TaxiListMulti from './TaxiListMulti'; 
+
+// --- NEW IMPORT ---
+import RentalBooking from './RentalBooking'; 
 
 function App() {
   // ==========================================
   // 1. STATE MANAGEMENT
   // ==========================================
   
-  // Controls which component is currently visible on the screen
-  // Added 'taxiList' to available views
   const [currentView, setCurrentView] = useState('home');
-
-  // Search & Itinerary Data
   const [searchTerm, setSearchTerm] = useState('');
   const [itineraries, setItineraries] = useState([]);
   const [detailedViewData, setDetailedViewData] = useState(null); 
@@ -47,7 +46,8 @@ function App() {
   // Surface Transport Flow Data
   const [trainListData, setTrainListData] = useState(null);
   const [busListData, setBusListData] = useState(null); 
-  const [taxiListData, setTaxiListData] = useState(null); // --- NEW STATE ---
+  const [taxiListData, setTaxiListData] = useState(null); 
+  const [rentalListData, setRentalListData] = useState(null); // --- NEW STATE ---
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -168,134 +168,56 @@ function App() {
             setCurrentView('busList');
           }}
           onShowTaxiList={(taxiData) => {
-            // --- NEW: Handle Taxi View Transition ---
             setTaxiListData(taxiData);
             setCurrentView('taxiList');
           }}
+          onShowRentalList={(rentalData) => {
+            // --- NEW: Handle Rental View Transition ---
+            setRentalListData(rentalData);
+            setCurrentView('rentalList');
+          }}
         />
       )}
 
-      {/* 3. Flight Search Form */}
+      {/* ... Flight Components ... */}
       {!isDetailsLoading && currentView === 'flightBooking' && (
-        <FlightBooking 
-          searchConfig={flightSearchConfig}
-          onBack={() => setCurrentView('timeline')}
-          onShowResults={(resultsData) => {
-            setFlightResultsData(resultsData);
-            setCurrentView('flightResults');
-          }}
-        />
+        <FlightBooking searchConfig={flightSearchConfig} onBack={() => setCurrentView('timeline')} onShowResults={(resultsData) => { setFlightResultsData(resultsData); setCurrentView('flightResults'); }} />
       )}
-
-      {/* 4. Flight Multi-List Results */}
       {!isDetailsLoading && currentView === 'flightResults' && (
-        <FlightResults 
-          flights={flightResultsData}
-          onBack={() => setCurrentView('flightBooking')}
-          onSelectFlight={(flight, passengerConfig) => {
-             setSelectedFlightData(flight);
-             setPassengerConfigData(passengerConfig);
-             setCurrentView('flightPricePassenger');
-          }}
-        />
+        <FlightResults flights={flightResultsData} onBack={() => setCurrentView('flightBooking')} onSelectFlight={(flight, passengerConfig) => { setSelectedFlightData(flight); setPassengerConfigData(passengerConfig); setCurrentView('flightPricePassenger'); }} />
       )}
-
-      {/* 5. Passenger Details & Checkout */}
       {!isDetailsLoading && currentView === 'flightPricePassenger' && (
-        <FlightPricePassenger 
-          flight={selectedFlightData}
-          passengerConfig={passengerConfigData}
-          onBack={() => setCurrentView('flightResults')}
-          onConfirmSeats={(seatData, pCount) => {
-             setSeatDataConfig(seatData);
-             setPassengerCount(pCount);
-             setCurrentView('flightSeatBooking');
-          }}
-        />
+        <FlightPricePassenger flight={selectedFlightData} passengerConfig={passengerConfigData} onBack={() => setCurrentView('flightResults')} onConfirmSeats={(seatData, pCount) => { setSeatDataConfig(seatData); setPassengerCount(pCount); setCurrentView('flightSeatBooking'); }} />
       )}
-
-      {/* 6. Seat Selection */}
       {!isDetailsLoading && currentView === 'flightSeatBooking' && (
-        <FlightSeatBooking 
-          seatData={seatDataConfig}
-          maxSeats={passengerCount}
-          onBack={() => setCurrentView('flightPricePassenger')}
-          onConfirmSeatsFinal={(mealConfig) => {
-            setMealConfigData(mealConfig);
-            setCurrentView('flightMealPreference');
-          }}
-        />
+        <FlightSeatBooking seatData={seatDataConfig} maxSeats={passengerCount} onBack={() => setCurrentView('flightPricePassenger')} onConfirmSeatsFinal={(mealConfig) => { setMealConfigData(mealConfig); setCurrentView('flightMealPreference'); }} />
       )}
-
-      {/* 7. Meal Preferences */}
       {!isDetailsLoading && currentView === 'flightMealPreference' && (
-        <FlightMealPreference 
-          mealConfig={mealConfigData}
-          onBack={() => setCurrentView('flightSeatBooking')}
-          onSavePreferences={(summaryDataPayload) => {
-             setSummaryData(summaryDataPayload);
-             setCurrentView('flightSummary');
-          }}
-        />
+        <FlightMealPreference mealConfig={mealConfigData} onBack={() => setCurrentView('flightSeatBooking')} onSavePreferences={(summaryDataPayload) => { setSummaryData(summaryDataPayload); setCurrentView('flightSummary'); }} />
       )}
-
-      {/* 8. Booking Summary & Payment */}
       {!isDetailsLoading && currentView === 'flightSummary' && (
-        <FlightSummary 
-          summaryData={summaryData}
-          onBack={() => setCurrentView('flightMealPreference')}
-          onPaymentSuccess={(confirmDataPayload) => {
-             setConfirmationData(confirmDataPayload);
-             setCurrentView('flightConfirmation');
-          }}
-        />
+        <FlightSummary summaryData={summaryData} onBack={() => setCurrentView('flightMealPreference')} onPaymentSuccess={(confirmDataPayload) => { setConfirmationData(confirmDataPayload); setCurrentView('flightConfirmation'); }} />
       )}
-
-      {/* 9. Final Confirmation & PDF Download */}
       {!isDetailsLoading && currentView === 'flightConfirmation' && (
-        <FlightConfirmation 
-          confirmationData={confirmationData}
-          summaryData={summaryData}
-          onHome={() => {
-             setDetailedViewData(null);
-             setCurrentView('home'); 
-          }}
-        />
+        <FlightConfirmation confirmationData={confirmationData} summaryData={summaryData} onHome={() => { setDetailedViewData(null); setCurrentView('home'); }} />
       )}
 
-      {/* 10. Train List View */}
+      {/* Surface Transport Views */}
       {!isDetailsLoading && currentView === 'trainList' && (
-        <TrainListMulti 
-          trainData={trainListData}
-          onBack={() => setCurrentView('timeline')}
-          onSelectTrain={(train, selectedClass) => {
-             console.log("Selected Train:", train.name, "Class:", selectedClass.name);
-             alert(`You selected ${train.name} (${selectedClass.name}).`);
-          }}
-        />
+        <TrainListMulti trainData={trainListData} onBack={() => setCurrentView('timeline')} onSelectTrain={(train, selectedClass) => { alert(`You selected ${train.name} (${selectedClass.name}).`); }} />
       )}
-
-      {/* 11. Bus List View */}
       {!isDetailsLoading && currentView === 'busList' && (
-        <BusListMulti 
-          busData={busListData}
-          onBack={() => setCurrentView('timeline')}
-          onSelectBus={(bus) => {
-             console.log("Selected Bus:", bus.operator);
-             alert(`You selected the ${bus.operator} bus. Proceeding to Passenger Details...`);
-          }}
-        />
+        <BusListMulti busData={busListData} onBack={() => setCurrentView('timeline')} onSelectBus={(bus) => { alert(`You selected the ${bus.operator} bus.`); }} />
+      )}
+      {!isDetailsLoading && currentView === 'taxiList' && (
+        <TaxiListMulti taxiData={taxiListData} onBack={() => setCurrentView('timeline')} onSelectTaxi={(taxi) => { alert(`You selected a ${taxi.type} from ${taxi.provider}.`); }} />
       )}
 
-      {/* 12. Taxi List View */}
-      {!isDetailsLoading && currentView === 'taxiList' && (
-        <TaxiListMulti 
-          taxiData={taxiListData}
+      {/* 13. Rental List View (NEW) */}
+      {!isDetailsLoading && currentView === 'rentalList' && (
+        <RentalBooking 
+          rentalData={rentalListData}
           onBack={() => setCurrentView('timeline')}
-          onSelectTaxi={(taxi) => {
-             console.log("Selected Taxi:", taxi.provider);
-             alert(`You selected a ${taxi.type} from ${taxi.provider}. Proceeding to checkout...`);
-          }}
         />
       )}
 

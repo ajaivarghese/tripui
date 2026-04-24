@@ -98,7 +98,7 @@ MOCK_ITINERARY_DETAILS = {
                 },
                 {
                     "time": "06:45 PM",
-                    "icon": "🚌",
+                    "icon": "🚗",
                     "title": "Vehicle Rental",
                     "tagClass": "tag-rental",
                     "tagLabel": "Rental",

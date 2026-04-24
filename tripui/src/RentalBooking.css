@@ -1,0 +1,239 @@
+/* --- GLOBAL STYLES SCOPED TO RENTAL COMPONENT --- */
+.rental-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  color: #4a5568;
+  font-family: sans-serif;
+  padding-bottom: 80px;
+}
+
+.rental-back-btn {
+  align-self: flex-start;
+  margin-bottom: 20px;
+  background: none;
+  border: none;
+  color: #3182ce;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+}
+.rental-back-btn:hover {
+  text-decoration: underline;
+}
+
+.rental-title {
+  color: #2d3748;
+  margin-bottom: 25px;
+  font-size: 26px;
+  align-self: flex-start;
+}
+
+/* --- DATE BAR (Top Card) --- */
+.rental-trip-bar {
+  position: sticky;
+  top: 10px;
+  z-index: 100;
+  background-color: #718096;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
+  box-sizing: border-box;
+}
+
+.rental-date-group { display: flex; flex-direction: column; gap: 4px; }
+.rental-date-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #e2e8f0; letter-spacing: 0.5px; }
+
+.rental-date-input {
+  background: #ffffff;
+  border: none;
+  color: #4a5568;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.rental-duration-badge {
+  margin-left: auto;
+  background-color: #ebf8ff;
+  color: #2b6cb0;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* --- SEARCH --- */
+.rental-search-wrapper { position: relative; width: 100%; margin-bottom: 25px; }
+
+.rental-search-input {
+  width: 100%;
+  padding: 15px 50px 15px 25px;
+  font-size: 16px;
+  color: #4a5568;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 50px;
+  outline: none;
+  box-sizing: border-box;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.rental-search-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a0aec0;
+  pointer-events: none;
+}
+
+/* --- VEHICLE GRID --- */
+.rental-vehicle-list {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.rental-vehicle-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.rental-vehicle-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e0;
+}
+
+/* Image Area */
+.rental-v-image-box {
+  width: 100%;
+  height: 160px;
+  background-color: #e2e8f0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rental-v-image-box img { width: 100%; height: 100%; object-fit: cover; }
+
+.rental-no-image-text {
+  color: #a0aec0;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+/* TYPE BADGES */
+.rental-v-type-badge {
+  position: absolute; top: 10px; left: 10px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 4px; color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+.type-car { background-color: #3182ce; }
+.type-van { background-color: #d69e2e; }
+.type-bus { background-color: #e53e3e; }
+.type-luxury-bus { background-color: #000000; }
+.type-suv { background-color: #805ad5; }
+
+/* DRIVER BADGE */
+.rental-driver-badge {
+  position: absolute; bottom: 10px; right: 10px;
+  font-size: 11px; font-weight: 700;
+  padding: 4px 10px; border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 2; display: flex; align-items: center; gap: 4px;
+}
+.rental-driver-yes { background-color: #718096; color: #fff; }
+.rental-driver-no  { background-color: #38b2ac; color: #fff; }
+
+/* Content */
+.rental-v-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+.rental-v-header { display: flex; flex-direction: column; margin-bottom: 15px; }
+.rental-v-name { font-size: 18px; font-weight: 700; color: #2d3748; line-height: 1.2; margin-bottom: 6px; }
+
+.rental-v-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rental-v-meta-tag {
+  font-size: 12px;
+  color: #718096;
+  background: #edf2f7;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* Specs */
+.rental-specs-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px;
+}
+.rental-spec-item {
+  font-size: 12px; color: #718096; display: flex; align-items: center; gap: 6px;
+  background: #f7fafc; padding: 6px; border-radius: 6px;
+}
+
+/* Pricing */
+.rental-pricing-box { margin-top: auto; padding-top: 15px; border-top: 1px dashed #e2e8f0; }
+.rental-price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
+.rental-daily-rate { font-size: 13px; color: #718096; }
+.rental-total-price { font-size: 24px; font-weight: 800; color: #2d3748; }
+.rental-total-label { font-size: 11px; color: #38a169; font-weight: 700; }
+
+/* BUTTON STYLE */
+.rental-book-btn {
+  width: 100%; margin-top: 10px;
+  background-color: #718096;
+  color: white; border: none;
+  padding: 12px;
+  border-radius: 50px;
+  font-weight: 600; font-size: 14px;
+  cursor: pointer; transition: background 0.2s, transform 0.1s;
+}
+.rental-book-btn:hover { background-color: #4a5568; }
+.rental-book-btn:active { transform: scale(0.98); }
+
+.rental-no-results {
+  text-align: center; color: #a0aec0; margin-top: 40px; grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+  .rental-trip-bar { flex-direction: column; align-items: stretch; gap: 15px; }
+  .rental-date-group { flex-direction: row; justify-content: space-between; align-items: center; }
+  .rental-date-input { width: 60%; text-align: right; }
+}
