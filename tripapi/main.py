@@ -1,4 +1,5 @@
 # main.py
+import adventure_list_view  # --- NEW IMPORT ---
 import bus_list_view
 import flight_booking_view
 import flight_list_view
@@ -7,7 +8,7 @@ import flight_passenger_view
 import flight_seat_view
 import flight_summary_view
 import itinerary_view
-import rental_vehicle_view  # --- NEW IMPORT ---
+import rental_vehicle_view
 import taxi_list_view
 import train_list_view
 from fastapi import FastAPI
@@ -36,7 +37,8 @@ app.include_router(flight_summary_view.router)
 app.include_router(train_list_view.router)
 app.include_router(bus_list_view.router)
 app.include_router(taxi_list_view.router)
-app.include_router(rental_vehicle_view.router)  # --- NEW ROUTER ---
+app.include_router(rental_vehicle_view.router)
+app.include_router(adventure_list_view.router)  # --- NEW ROUTER ---
 
 
 # --- Request Model for Search ---

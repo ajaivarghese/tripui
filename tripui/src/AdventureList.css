@@ -1,0 +1,21 @@
+.adventure-container { padding: 20px; max-width: 1000px; margin: 0 auto; }
+.controls-wrapper { margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px; }
+.search-input { width: 100%; max-width: 500px; padding: 12px 20px; border-radius: 25px; border: 1px solid #e2e8f0; }
+.filter-row { display: flex; gap: 10px; overflow-x: auto; width: 100%; justify-content: center; }
+.filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid #cbd5e0; background: white; cursor: pointer; }
+.filter-btn.active { background: #718096; color: white; }
+.activity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.adv-card { background: white; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column; }
+.img-box { height: 150px; background: #edf2f7; display: flex; align-items: center; justify-content: center; position: relative; }
+.diff-badge { position: absolute; top: 10px; right: 10px; padding: 4px 8px; border-radius: 4px; font-size: 10px; color: white; }
+.diff-eas { background: #48bb78; } .diff-mod { background: #ed8936; } .diff-har { background: #e53e3e; }
+.cat-badge { position: absolute; bottom: 10px; left: 10px; background: #718096; color: white; padding: 2px 6px; font-size: 10px; border-radius: 4px; }
+.card-content { padding: 15px; flex-grow: 1; }
+.adv-title { font-weight: bold; font-size: 18px; }
+.adv-loc { color: #718096; font-size: 13px; margin-bottom: 10px; }
+.adv-desc { font-size: 14px; color: #4a5568; height: 40px; overflow: hidden; }
+.stats-row { display: flex; background: #f7fafc; padding: 10px; border-radius: 8px; margin: 15px 0; justify-content: space-around; }
+.stat-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; }
+.card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #edf2f7; pt: 10px; }
+.price-val { font-size: 20px; font-weight: bold; }
+.book-btn { background: #718096; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; }

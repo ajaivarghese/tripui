@@ -22,7 +22,7 @@ import TaxiListMulti from './TaxiListMulti';
 // --- NEW IMPORT ---
 import RentalBooking from './RentalBooking'; 
 import MultiTransportList from './MultiTransportList';
-
+import AdventureList from './AdventureList';
 
 function App() {
   // ==========================================
@@ -49,8 +49,9 @@ function App() {
   const [trainListData, setTrainListData] = useState(null);
   const [busListData, setBusListData] = useState(null); 
   const [taxiListData, setTaxiListData] = useState(null); 
-  const [rentalListData, setRentalListData] = useState(null); // --- NEW STATE ---
+  const [rentalListData, setRentalListData] = useState(null);
   const [multiTransportData, setMultiTransportData] = useState(null);
+  const [adventureData, setAdventureData] = useState(null);
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -182,6 +183,10 @@ function App() {
             setMultiTransportData(multiData);
             setCurrentView('multiTransportList');
           }}
+          onShowAdventureList={(advData) => {
+            setAdventureData(advData);
+            setCurrentView('adventureList');
+          }}
         />
       )}
 
@@ -235,6 +240,14 @@ function App() {
         />
       )}
 
+      {/* 15. Adventure List View (NEW) */}
+      {!isDetailsLoading && currentView === 'adventureList' && (
+        <AdventureList 
+          htmlContent={adventureData}
+          onBack={() => setCurrentView('timeline')}
+        />
+      )}
+      
     </div>
   );
 }

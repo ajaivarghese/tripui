@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ItineraryTimeline.css';
 
-const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch, onShowTrainList, onShowBusList, onShowTaxiList, onShowRentalList, onShowMultiList }) => {
+const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch, onShowTrainList, onShowBusList, onShowTaxiList, onShowRentalList, onShowMultiList, onShowAdventureList }) => {
   const [expandedDays, setExpandedDays] = useState(
     timelineData ? timelineData.reduce((acc, day) => ({ ...acc, [day.dayId]: true }), {}) : {}
   );
@@ -23,6 +23,7 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
     const isTaxi = titleLower.includes('taxi') || titleLower.includes('transfer') || event.icon === '🚖';
     const isRental = titleLower.includes('rental') || titleLower.includes('car') || event.icon === '🚗';
     const isMulti = titleLower.includes('multi');
+    const isAdventure = event.tagLabel && event.tagLabel.toLowerCase().includes('adventure');
 
     if (isFlight) {
       // ... existing flight logic ...
@@ -114,6 +115,26 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
       } finally {
         setLoadingEventId(null);
       }
+    } else if (isAdventure) {
+      setLoadingEventId(event.id || event.title);
+      try {
+        const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/adventure/lists', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId: event.id, title: event.title })
+        });
+        
+        // Always extract as text since we are expecting an HTML document[cite: 3]
+        const adventureHtml = await response.text();
+
+        if (onShowAdventureList) onShowAdventureList(adventureHtml);
+      } catch (error) {
+        console.error("Error initiating adventure search:", error);
+        alert("Failed to reach adventure list API.");
+        if (onShowAdventureList) onShowAdventureList(null); 
+      } finally {
+        setLoadingEventId(null);
+      }      
     } else {
       if (onEventClick) onEventClick(event);
     }
