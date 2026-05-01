@@ -1,7 +1,19 @@
 import React, { useState } from 'react';
 import './ItineraryTimeline.css';
 
-const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSearch, onShowTrainList, onShowBusList, onShowTaxiList, onShowRentalList, onShowMultiList, onShowAdventureList }) => {
+const ItineraryTimeline = ({ 
+  timelineData, 
+  onBack, 
+  onEventClick, 
+  onShowFlightSearch, 
+  onShowTrainList, 
+  onShowBusList, 
+  onShowTaxiList, 
+  onShowRentalList, 
+  onShowMultiList, 
+  onShowAdventureList,
+  onShowActivityList // NEW PROP added for Activity List
+}) => {
   const [expandedDays, setExpandedDays] = useState(
     timelineData ? timelineData.reduce((acc, day) => ({ ...acc, [day.dayId]: true }), {}) : {}
   );
@@ -17,6 +29,8 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
 
   const handleEventClick = async (event) => {
     const titleLower = event.title.toLowerCase();
+    
+    // Tag and title detection
     const isFlight = titleLower.includes('flight') || event.icon === '✈️';
     const isTrain = titleLower.includes('train') || event.icon === '🚆';
     const isBus = titleLower.includes('bus') || event.icon === '🚌'; 
@@ -24,9 +38,9 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
     const isRental = titleLower.includes('rental') || titleLower.includes('car') || event.icon === '🚗';
     const isMulti = titleLower.includes('multi');
     const isAdventure = event.tagLabel && event.tagLabel.toLowerCase().includes('adventure');
+    const isActivity = event.tagLabel && event.tagLabel.toLowerCase().includes('activity'); // NEW CHECK
 
     if (isFlight) {
-      // ... existing flight logic ...
       setLoadingEventId(event.id || event.title);
       try {
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/flights/search', {
@@ -34,36 +48,51 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
         });
         const searchConfigData = await response.json();
         if (onShowFlightSearch) onShowFlightSearch(searchConfigData);
-      } catch (error) { alert("Failed to reach flight API."); } finally { setLoadingEventId(null); }
+      } catch (error) { 
+        alert("Failed to reach flight API."); 
+      } finally { 
+        setLoadingEventId(null); 
+      }
     } else if (isTrain) {
-      // ... existing train logic ...
       setLoadingEventId(event.id || event.title);
       try {
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/train/lists', {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ eventId: event.id, title: event.title })
         });
         if (onShowTrainList) onShowTrainList(response.ok ? await response.json() : null);
-      } catch (error) { alert("Failed to reach train API."); if (onShowTrainList) onShowTrainList(null); } finally { setLoadingEventId(null); }
+      } catch (error) { 
+        alert("Failed to reach train API."); 
+        if (onShowTrainList) onShowTrainList(null); 
+      } finally { 
+        setLoadingEventId(null); 
+      }
     } else if (isBus) {
-       // ... existing bus logic ...
       setLoadingEventId(event.id || event.title);
       try {
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/bus/lists', {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ eventId: event.id, title: event.title })
         });
         if (onShowBusList) onShowBusList(response.ok ? await response.json() : null);
-      } catch (error) { alert("Failed to reach bus API."); if (onShowBusList) onShowBusList(null); } finally { setLoadingEventId(null); }
+      } catch (error) { 
+        alert("Failed to reach bus API."); 
+        if (onShowBusList) onShowBusList(null); 
+      } finally { 
+        setLoadingEventId(null); 
+      }
     } else if (isTaxi) {
-      // ... existing taxi logic ...
       setLoadingEventId(event.id || event.title);
       try {
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/taxi/list', {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ eventId: event.id, title: event.title })
         });
         if (onShowTaxiList) onShowTaxiList(response.ok ? await response.json() : null);
-      } catch (error) { alert("Failed to reach taxi API."); if (onShowTaxiList) onShowTaxiList(null); } finally { setLoadingEventId(null); }
+      } catch (error) { 
+        alert("Failed to reach taxi API."); 
+        if (onShowTaxiList) onShowTaxiList(null); 
+      } finally { 
+        setLoadingEventId(null); 
+      }
     } else if (isRental) {
-      // --- NEW RENTAL API CALL ---
       setLoadingEventId(event.id || event.title);
       try {
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/rental/vehicle/book', {
@@ -74,7 +103,6 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
         
         let rentalData = null;
         const contentType = response.headers.get("content-type");
-        // Accommodate JSON or raw HTML string returns gracefully
         if (contentType && contentType.includes("application/json")) {
             rentalData = await response.json();
         } else {
@@ -90,7 +118,6 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
         setLoadingEventId(null);
       }
     } else if (isMulti) {
-      // --- NEW: Multi Transport API Call ---
       setLoadingEventId(event.id || event.title);
       try {
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/transport/list', {
@@ -124,7 +151,6 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
           body: JSON.stringify({ eventId: event.id, title: event.title })
         });
         
-        // Always extract as text since we are expecting an HTML document[cite: 3]
         const adventureHtml = await response.text();
 
         if (onShowAdventureList) onShowAdventureList(adventureHtml);
@@ -132,6 +158,27 @@ const ItineraryTimeline = ({ timelineData, onBack, onEventClick, onShowFlightSea
         console.error("Error initiating adventure search:", error);
         alert("Failed to reach adventure list API.");
         if (onShowAdventureList) onShowAdventureList(null); 
+      } finally {
+        setLoadingEventId(null);
+      }      
+    } else if (isActivity) {
+      // --- NEW ACTIVITY API CALL ---
+      setLoadingEventId(event.id || event.title);
+      try {
+        const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/activity/lists', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId: event.id, title: event.title })
+        });
+        
+        // Extracting as text in case you need to pass HTML to the component
+        const activityHtml = await response.text();
+
+        if (onShowActivityList) onShowActivityList(activityHtml);
+      } catch (error) {
+        console.error("Error initiating activity search:", error);
+        alert("Failed to reach activity list API.");
+        if (onShowActivityList) onShowActivityList(null); 
       } finally {
         setLoadingEventId(null);
       }      

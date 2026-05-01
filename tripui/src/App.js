@@ -18,11 +18,12 @@ import FlightConfirmation from './FlightConfirmation';
 import TrainListMulti from './TrainListMulti';
 import BusListMulti from './BusListMulti'; 
 import TaxiListMulti from './TaxiListMulti'; 
-
-// --- NEW IMPORT ---
 import RentalBooking from './RentalBooking'; 
 import MultiTransportList from './MultiTransportList';
+
+// --- Experience Components ---
 import AdventureList from './AdventureList';
+import ActivityList from './ActivityList'; // NEW IMPORT
 
 function App() {
   // ==========================================
@@ -51,7 +52,10 @@ function App() {
   const [taxiListData, setTaxiListData] = useState(null); 
   const [rentalListData, setRentalListData] = useState(null);
   const [multiTransportData, setMultiTransportData] = useState(null);
+
+  // Experience Flow Data
   const [adventureData, setAdventureData] = useState(null);
+  const [activityData, setActivityData] = useState(null); // NEW STATE
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -187,10 +191,14 @@ function App() {
             setAdventureData(advData);
             setCurrentView('adventureList');
           }}
+          onShowActivityList={(actData) => {
+            setActivityData(actData);
+            setCurrentView('activityList'); // NEW ROUTING
+          }}
         />
       )}
 
-      {/* ... Flight Components ... */}
+      {/* --- Flight Views --- */}
       {!isDetailsLoading && currentView === 'flightBooking' && (
         <FlightBooking searchConfig={flightSearchConfig} onBack={() => setCurrentView('timeline')} onShowResults={(resultsData) => { setFlightResultsData(resultsData); setCurrentView('flightResults'); }} />
       )}
@@ -213,7 +221,7 @@ function App() {
         <FlightConfirmation confirmationData={confirmationData} summaryData={summaryData} onHome={() => { setDetailedViewData(null); setCurrentView('home'); }} />
       )}
 
-      {/* Surface Transport Views */}
+      {/* --- Surface Transport Views --- */}
       {!isDetailsLoading && currentView === 'trainList' && (
         <TrainListMulti trainData={trainListData} onBack={() => setCurrentView('timeline')} onSelectTrain={(train, selectedClass) => { alert(`You selected ${train.name} (${selectedClass.name}).`); }} />
       )}
@@ -223,29 +231,21 @@ function App() {
       {!isDetailsLoading && currentView === 'taxiList' && (
         <TaxiListMulti taxiData={taxiListData} onBack={() => setCurrentView('timeline')} onSelectTaxi={(taxi) => { alert(`You selected a ${taxi.type} from ${taxi.provider}.`); }} />
       )}
-
-      {/* 13. Rental List View (NEW) */}
       {!isDetailsLoading && currentView === 'rentalList' && (
-        <RentalBooking 
-          rentalData={rentalListData}
-          onBack={() => setCurrentView('timeline')}
-        />
+        <RentalBooking rentalData={rentalListData} onBack={() => setCurrentView('timeline')} />
       )}
-
-      {/* 14. Multi Transport List View (NEW) */}
       {!isDetailsLoading && currentView === 'multiTransportList' && (
-        <MultiTransportList 
-          transportData={multiTransportData}
-          onBack={() => setCurrentView('timeline')}
-        />
+        <MultiTransportList transportData={multiTransportData} onBack={() => setCurrentView('timeline')} />
       )}
 
-      {/* 15. Adventure List View (NEW) */}
+      {/* --- Experience Views --- */}
       {!isDetailsLoading && currentView === 'adventureList' && (
-        <AdventureList 
-          htmlContent={adventureData}
-          onBack={() => setCurrentView('timeline')}
-        />
+        <AdventureList htmlContent={adventureData} onBack={() => setCurrentView('timeline')} />
+      )}
+      
+      {/* NEW: Activity List View */}
+      {!isDetailsLoading && currentView === 'activityList' && (
+        <ActivityList htmlContent={activityData} onBack={() => setCurrentView('timeline')} />
       )}
       
     </div>

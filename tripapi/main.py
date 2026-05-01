@@ -1,5 +1,6 @@
 # main.py
-import adventure_list_view  # --- NEW IMPORT ---
+import activity_list_view  # --- NEW IMPORT ---
+import adventure_list_view
 import bus_list_view
 import flight_booking_view
 import flight_list_view
@@ -38,7 +39,8 @@ app.include_router(train_list_view.router)
 app.include_router(bus_list_view.router)
 app.include_router(taxi_list_view.router)
 app.include_router(rental_vehicle_view.router)
-app.include_router(adventure_list_view.router)  # --- NEW ROUTER ---
+app.include_router(adventure_list_view.router)
+app.include_router(activity_list_view.router)  # --- NEW ROUTER ---
 
 
 # --- Request Model for Search ---
