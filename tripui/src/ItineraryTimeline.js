@@ -12,7 +12,8 @@ const ItineraryTimeline = ({
   onShowRentalList, 
   onShowMultiList, 
   onShowAdventureList,
-  onShowActivityList // NEW PROP added for Activity List
+  onShowActivityList,
+  onShowAccommodationList // NEW PROP added for Accommodation List
 }) => {
   const [expandedDays, setExpandedDays] = useState(
     timelineData ? timelineData.reduce((acc, day) => ({ ...acc, [day.dayId]: true }), {}) : {}
@@ -38,7 +39,14 @@ const ItineraryTimeline = ({
     const isRental = titleLower.includes('rental') || titleLower.includes('car') || event.icon === '🚗';
     const isMulti = titleLower.includes('multi');
     const isAdventure = event.tagLabel && event.tagLabel.toLowerCase().includes('adventure');
-    const isActivity = event.tagLabel && event.tagLabel.toLowerCase().includes('activity'); // NEW CHECK
+    const isActivity = event.tagLabel && event.tagLabel.toLowerCase().includes('activity');
+    
+    // Check if the event card represents a stay/accommodation
+    const isAccommodation = event.tagLabel?.toLowerCase().includes('stay') || 
+                            titleLower.includes('stay') || 
+                            titleLower.includes('hotel') || 
+                            event.icon === '🏨' || 
+                            event.icon === '🛏️';
 
     if (isFlight) {
       setLoadingEventId(event.id || event.title);
@@ -162,7 +170,6 @@ const ItineraryTimeline = ({
         setLoadingEventId(null);
       }      
     } else if (isActivity) {
-      // --- NEW ACTIVITY API CALL ---
       setLoadingEventId(event.id || event.title);
       try {
         const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/activity/lists', {
@@ -171,7 +178,6 @@ const ItineraryTimeline = ({
           body: JSON.stringify({ eventId: event.id, title: event.title })
         });
         
-        // Extracting as text in case you need to pass HTML to the component
         const activityHtml = await response.text();
 
         if (onShowActivityList) onShowActivityList(activityHtml);
@@ -182,6 +188,9 @@ const ItineraryTimeline = ({
       } finally {
         setLoadingEventId(null);
       }      
+    } else if (isAccommodation) {
+      // --- ROUTE TO ACCOMMODATION COMPONENT ---
+      if (onShowAccommodationList) onShowAccommodationList();
     } else {
       if (onEventClick) onEventClick(event);
     }

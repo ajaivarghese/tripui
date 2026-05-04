@@ -85,7 +85,7 @@ MOCK_ITINERARY_DETAILS = {
                     "icon": "🏡",
                     "title": "Relax at Resort",
                     "tagClass": "tag-stay",
-                    "tagLabel": "Stay",
+                    "tagLabel": "accommodation",
                     "details": "Check-in at <em>Valley View Lodge</em> for a short rest/spa.",
                 },
                 {

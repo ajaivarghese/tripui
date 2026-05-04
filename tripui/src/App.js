@@ -21,9 +21,10 @@ import TaxiListMulti from './TaxiListMulti';
 import RentalBooking from './RentalBooking'; 
 import MultiTransportList from './MultiTransportList';
 
-// --- Experience Components ---
+// --- Experience & Accommodation Components ---
 import AdventureList from './AdventureList';
-import ActivityList from './ActivityList'; // NEW IMPORT
+import ActivityList from './ActivityList';
+import AccommodationList from './AccommodationList'; // NEW IMPORT
 
 function App() {
   // ==========================================
@@ -55,7 +56,7 @@ function App() {
 
   // Experience Flow Data
   const [adventureData, setAdventureData] = useState(null);
-  const [activityData, setActivityData] = useState(null); // NEW STATE
+  const [activityData, setActivityData] = useState(null);
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -193,7 +194,10 @@ function App() {
           }}
           onShowActivityList={(actData) => {
             setActivityData(actData);
-            setCurrentView('activityList'); // NEW ROUTING
+            setCurrentView('activityList'); 
+          }}
+          onShowAccommodationList={() => {
+            setCurrentView('accommodationList'); // NEW ROUTING HOOKUP
           }}
         />
       )}
@@ -243,9 +247,13 @@ function App() {
         <AdventureList htmlContent={adventureData} onBack={() => setCurrentView('timeline')} />
       )}
       
-      {/* NEW: Activity List View */}
       {!isDetailsLoading && currentView === 'activityList' && (
         <ActivityList htmlContent={activityData} onBack={() => setCurrentView('timeline')} />
+      )}
+
+      {/* --- Accommodation Views (NEW) --- */}
+      {!isDetailsLoading && currentView === 'accommodationList' && (
+        <AccommodationList onBack={() => setCurrentView('timeline')} />
       )}
       
     </div>
