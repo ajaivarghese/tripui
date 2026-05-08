@@ -43,6 +43,14 @@ MOCK_ITINERARY_DETAILS = {
                     "details": "<ul class='activity-list'><li>Walk through the Royal Botanical Gardens</li><li>Photo op at the Palace Gates</li><li>Evening tea at the Historic Square</li></ul>",
                 },
                 {
+                    "time": "06:30 PM",
+                    "icon": "📸",
+                    "title": "City Food Tour ",
+                    "tagClass": "tag-local-tours",
+                    "tagLabel": "Local Tours",
+                    "details": "<ul class='activity-list'><li>Guided Food tours around city</li><li>Spanish Delite</li><li>Moroccan specials</li></ul>",
+                },
+                {
                     "time": "08:00 PM",
                     "icon": "🏨",
                     "title": "Check-in & Rest",

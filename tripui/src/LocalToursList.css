@@ -1,0 +1,44 @@
+.local-tours-wrapper {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.local-tours-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.close-btn {
+  padding: 8px 16px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background-color: #d9363e;
+}
+
+.tours-status {
+  padding: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.tours-status.error {
+  color: #ff4d4f;
+}
+
+/* Add any specific styles here that target the classes inside the injected HTML */
+.local-tours-content {
+  line-height: 1.6;
+}

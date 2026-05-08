@@ -4,6 +4,7 @@ import './App.css';
 // --- Itinerary Components ---
 import ItineraryList from './ItineraryList';
 import ItineraryTimeline from './ItineraryTimeline';
+import LocalToursList from './LocalToursList';
 
 // --- Flight Components ---
 import FlightBooking from './FlightBooking'; 
@@ -57,6 +58,7 @@ function App() {
   // Experience Flow Data
   const [adventureData, setAdventureData] = useState(null);
   const [activityData, setActivityData] = useState(null);
+  const [localTourData, setLocalTourData] = useState(null);
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -197,8 +199,12 @@ function App() {
             setCurrentView('activityList'); 
           }}
           onShowAccommodationList={() => {
-            setCurrentView('accommodationList'); // NEW ROUTING HOOKUP
+            setCurrentView('accommodationList');
           }}
+          onShowLocalTourList={(localTourData) => {
+            setLocalTourData(localTourData);
+            setCurrentView('localTourList'); 
+          }}          
         />
       )}
 
@@ -255,7 +261,12 @@ function App() {
       {!isDetailsLoading && currentView === 'accommodationList' && (
         <AccommodationList onBack={() => setCurrentView('timeline')} />
       )}
-      
+
+      {/* --- LocalTour Views (NEW) --- */}
+      {!isDetailsLoading && currentView === 'localTourList' && (
+        <LocalToursList onBack={() => setCurrentView('timeline')} />
+      )}
+
     </div>
   );
 }

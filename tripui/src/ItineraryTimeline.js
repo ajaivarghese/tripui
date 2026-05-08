@@ -13,7 +13,8 @@ const ItineraryTimeline = ({
   onShowMultiList, 
   onShowAdventureList,
   onShowActivityList,
-  onShowAccommodationList // NEW PROP added for Accommodation List
+  onShowAccommodationList,
+  onShowLocalTourList
 }) => {
   const [expandedDays, setExpandedDays] = useState(
     timelineData ? timelineData.reduce((acc, day) => ({ ...acc, [day.dayId]: true }), {}) : {}
@@ -40,6 +41,7 @@ const ItineraryTimeline = ({
     const isMulti = titleLower.includes('multi');
     const isAdventure = event.tagLabel && event.tagLabel.toLowerCase().includes('adventure');
     const isActivity = event.tagLabel && event.tagLabel.toLowerCase().includes('activity');
+    const isLocalTour = event.tagLabel && event.tagLabel.toLowerCase().includes('local tour');
     
     // Check if the event card represents a stay/accommodation
     const isAccommodation = event.tagLabel?.toLowerCase().includes('stay') || 
@@ -191,6 +193,25 @@ const ItineraryTimeline = ({
     } else if (isAccommodation) {
       // --- ROUTE TO ACCOMMODATION COMPONENT ---
       if (onShowAccommodationList) onShowAccommodationList();
+    } else if (isLocalTour) {
+      setLoadingEventId(event.id || event.title);
+      try {
+        const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/local_tour/lists', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId: event.id, title: event.title })
+        });
+        
+        const localTourHtml = await response.text();
+
+        if (onShowLocalTourList) onShowLocalTourList(localTourHtml);
+      } catch (error) {
+        console.error("Error initiating local tour search:", error);
+        alert("Failed to reach local tour list API.");
+        if (onShowLocalTourList) onShowLocalTourList(null); 
+      } finally {
+        setLoadingEventId(null);
+      }      
     } else {
       if (onEventClick) onEventClick(event);
     }

@@ -13,6 +13,7 @@ import itinerary_view
 import rental_vehicle_view
 import taxi_list_view
 import train_list_view
+import local_tour
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -43,7 +44,7 @@ app.include_router(rental_vehicle_view.router)
 app.include_router(adventure_list_view.router)
 app.include_router(activity_list_view.router)
 app.include_router(accommodation.router)
-
+app.include_router(local_tour.router)
 
 # --- Request Model for Search ---
 class SearchRequest(BaseModel):
