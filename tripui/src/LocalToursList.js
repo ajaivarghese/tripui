@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import './LocalToursList.css'; // Make sure to adapt ActivityList.css styles to this file
+import './LocalToursList.css';
 
 // Mocked data replacing the raw HTML fetch. 
 // If your API returns JSON, you can swap this back to a fetch() call inside a useEffect.
@@ -48,13 +48,16 @@ const toursData = [
   }
 ];
 
-const LocalToursList = ({ tourData, onClose }) => {
+const LocalToursList = ({ tourData, onClose, onBack, onViewTourDetails }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentCategory, setCurrentCategory] = useState('All');
   const [expandedDetails, setExpandedDetails] = useState({});
   const [bookedTours, setBookedTours] = useState({});
 
-  // Filtering Logic based on ActivityList.js
+  // Navigation handler supporting both prop patterns
+  const handleClose = onClose || onBack;
+
+  // Filtering Logic
   const filteredTours = useMemo(() => {
     const term = searchTerm.toLowerCase().trim();
     return toursData.filter(tour => {
@@ -68,15 +71,21 @@ const LocalToursList = ({ tourData, onClose }) => {
     setExpandedDetails(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const handleBookTour = (id, title) => {
-    setBookedTours(prev => ({ ...prev, [id]: true }));
-    alert(`"${title}" has been added to your itinerary!`);
+  const handleBookClick = (id, title) => {
+    // Trigger the backend POST call view flow if the handler is provided
+    if (onViewTourDetails) {
+      onViewTourDetails(id, title);
+    } else {
+      // Fallback local state booking logic
+      setBookedTours(prev => ({ ...prev, [id]: true }));
+      alert(`"${title}" has been added to your itinerary!`);
+    }
   };
 
   return (
     <div className="activity-wrapper">
       <div className="activity-header-bar">
-        <button className="activity-back-btn" onClick={onClose}>
+        <button className="activity-back-btn" onClick={handleClose}>
           ← Back to Main Menu
         </button>
       </div>
@@ -180,7 +189,7 @@ const LocalToursList = ({ tourData, onClose }) => {
                       <button 
                         className="activity-add-btn" 
                         disabled={isBooked}
-                        onClick={() => handleBookTour(tour.id, tour.title)}
+                        onClick={() => handleBookClick(tour.id, tour.title)}
                         style={{ backgroundColor: isBooked ? "#a0aec0" : "#3182ce" }}
                       >
                         {isBooked ? "Booked" : "Book Tour"}

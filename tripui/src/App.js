@@ -25,7 +25,8 @@ import MultiTransportList from './MultiTransportList';
 // --- Experience & Accommodation Components ---
 import AdventureList from './AdventureList';
 import ActivityList from './ActivityList';
-import AccommodationList from './AccommodationList'; // NEW IMPORT
+import AccommodationList from './AccommodationList';
+import LocalTourView from './LocalTourView'; // NEW IMPORT
 
 function App() {
   // ==========================================
@@ -59,6 +60,7 @@ function App() {
   const [adventureData, setAdventureData] = useState(null);
   const [activityData, setActivityData] = useState(null);
   const [localTourData, setLocalTourData] = useState(null);
+  const [detailedTourViewData, setDetailedTourViewData] = useState(null); // NEW STATE
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -106,6 +108,27 @@ function App() {
     } catch (error) {
       console.error("Failed to fetch itinerary details:", error);
       alert("Failed to load itinerary details.");
+    } finally {
+      setIsDetailsLoading(false);
+    }
+  };
+
+  // NEW HANDLER: Fetches detailed view for a local tour
+  const fetchDetailedLocalTourView = async (tourId, tourTitle) => {
+    setIsDetailsLoading(true);
+    try {
+      const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/local_tour/view', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tour_id: tourId, title: tourTitle })
+      });
+      
+      const htmlStringData = await response.text();
+      setDetailedTourViewData(htmlStringData);
+      setCurrentView('localTourView');
+    } catch (error) {
+      console.error("Failed to fetch detailed local tour content:", error);
+      alert("Failed to load local tour details view.");
     } finally {
       setIsDetailsLoading(false);
     }
@@ -257,14 +280,27 @@ function App() {
         <ActivityList htmlContent={activityData} onBack={() => setCurrentView('timeline')} />
       )}
 
-      {/* --- Accommodation Views (NEW) --- */}
+      {/* --- Accommodation Views --- */}
       {!isDetailsLoading && currentView === 'accommodationList' && (
         <AccommodationList onBack={() => setCurrentView('timeline')} />
       )}
 
-      {/* --- LocalTour Views (NEW) --- */}
+      {/* --- LocalTour Views --- */}
       {!isDetailsLoading && currentView === 'localTourList' && (
-        <LocalToursList onBack={() => setCurrentView('timeline')} />
+        <LocalToursList 
+          tourData={localTourData}
+          onBack={() => setCurrentView('timeline')} 
+          onClose={() => setCurrentView('timeline')}
+          onViewTourDetails={fetchDetailedLocalTourView}
+        />
+      )}
+
+      {/* --- Detailed Local Tour View (NEW) --- */}
+      {!isDetailsLoading && currentView === 'localTourView' && (
+        <LocalTourView 
+          htmlContent={detailedTourViewData} 
+          onBack={() => setCurrentView('localTourList')} 
+        />
       )}
 
     </div>
