@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './LocalTourView.css';
 
-const LocalTourView = ({ htmlContent, onBack }) => {
+const LocalTourView = ({ htmlContent, onBack, onBookNow }) => {
   // State Management extracted from the original HTML behavior
   const [activeTab, setActiveTab] = useState('overview');
   const [isBooked, setIsBooked] = useState(false);
@@ -52,8 +52,14 @@ const LocalTourView = ({ htmlContent, onBack }) => {
   };
 
   const handleBookNow = () => {
-    setIsBooked(true);
-    alert(`"${tourDetails.title}" has been successfully added to your cart!`);
+    // Route through the parent checkout dispatcher if provided
+    if (onBookNow) {
+      onBookNow(tourDetails);
+    } else {
+      // Fallback local visual confirmation
+      setIsBooked(true);
+      alert(`"${tourDetails.title}" has been successfully added to your cart!`);
+    }
   };
 
   return (

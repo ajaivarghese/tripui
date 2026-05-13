@@ -26,7 +26,8 @@ import MultiTransportList from './MultiTransportList';
 import AdventureList from './AdventureList';
 import ActivityList from './ActivityList';
 import AccommodationList from './AccommodationList';
-import LocalTourView from './LocalTourView'; // NEW IMPORT
+import LocalTourView from './LocalTourView';
+import LocalTourBook from './LocalTourBook'; // NEW COMPONENT IMPORT
 
 function App() {
   // ==========================================
@@ -60,7 +61,8 @@ function App() {
   const [adventureData, setAdventureData] = useState(null);
   const [activityData, setActivityData] = useState(null);
   const [localTourData, setLocalTourData] = useState(null);
-  const [detailedTourViewData, setDetailedTourViewData] = useState(null); // NEW STATE
+  const [detailedTourViewData, setDetailedTourViewData] = useState(null);
+  const [bookTourHtmlData, setBookTourHtmlData] = useState(null); // BOOKING STATE DATA
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -113,7 +115,7 @@ function App() {
     }
   };
 
-  // NEW HANDLER: Fetches detailed view for a local tour
+  // Local tour extraction view handler
   const fetchDetailedLocalTourView = async (tourId, tourTitle) => {
     setIsDetailsLoading(true);
     try {
@@ -129,6 +131,28 @@ function App() {
     } catch (error) {
       console.error("Failed to fetch detailed local tour content:", error);
       alert("Failed to load local tour details view.");
+    } finally {
+      setIsDetailsLoading(false);
+    }
+  };
+
+  // NEW HANDLER: Triggers when the user clicks 'Book Now' inside the Tour View
+  const handleInitiateLocalTourBooking = async (tourDetailsPayload) => {
+    setIsDetailsLoading(true);
+    try {
+      const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/local_tour/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tour: tourDetailsPayload })
+      });
+      
+      // Captures the contents of local_tours_book.html returned by backend
+      const rawHtmlContent = await response.text();
+      setBookTourHtmlData(rawHtmlContent);
+      setCurrentView('localTourBook');
+    } catch (error) {
+      console.error("Failed to reach booking entry API:", error);
+      alert("Encountered network error reaching checkout endpoint.");
     } finally {
       setIsDetailsLoading(false);
     }
@@ -285,7 +309,7 @@ function App() {
         <AccommodationList onBack={() => setCurrentView('timeline')} />
       )}
 
-      {/* --- LocalTour Views --- */}
+      {/* --- LocalTour Screens Chain --- */}
       {!isDetailsLoading && currentView === 'localTourList' && (
         <LocalToursList 
           tourData={localTourData}
@@ -295,11 +319,20 @@ function App() {
         />
       )}
 
-      {/* --- Detailed Local Tour View (NEW) --- */}
+      {/* Parent Tour Detail Screen */}
       {!isDetailsLoading && currentView === 'localTourView' && (
         <LocalTourView 
           htmlContent={detailedTourViewData} 
-          onBack={() => setCurrentView('localTourList')} 
+          onBack={() => setCurrentView('localTourList')}
+          onBookNow={handleInitiateLocalTourBooking}
+        />
+      )}
+
+      {/* Checkout Booking Screen (NEW) */}
+      {!isDetailsLoading && currentView === 'localTourBook' && (
+        <LocalTourBook 
+          htmlContent={bookTourHtmlData} 
+          onBack={() => setCurrentView('localTourView')}
         />
       )}
 

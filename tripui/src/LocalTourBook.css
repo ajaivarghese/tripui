@@ -1,0 +1,251 @@
+/* Scoped Wrapper */
+.tour-book-wrapper {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f4f8;
+  color: #2d3748;
+  min-height: 100vh;
+  padding-bottom: 60px;
+  box-sizing: border-box;
+}
+
+.tour-book-container {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Typography & Navigation */
+.tour-book-back-link {
+  background: none;
+  border: none;
+  color: #3182ce;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  display: inline-block;
+  width: fit-content;
+}
+
+.tour-book-back-link:hover {
+  text-decoration: underline;
+}
+
+.tour-book-container h1 {
+  color: #2d3748;
+  margin: 0 0 5px 0;
+  font-size: 28px;
+}
+
+.tour-book-subtitle {
+  color: #718096;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+/* Core Layout Grids */
+.tour-book-checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 30px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .tour-book-checkout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Base Panel UI */
+.tour-book-panel {
+  background-color: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.tour-book-panel-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #edf2f7;
+  padding-bottom: 10px;
+}
+
+/* Form Fields */
+.tour-book-form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tour-book-form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.tour-book-form-row .tour-book-form-group {
+  flex: 1;
+}
+
+.tour-book-panel label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.tour-book-panel input[type="text"],
+.tour-book-panel input[type="email"],
+.tour-book-panel input[type="date"],
+.tour-book-panel input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  background-color: #ffffff;
+  color: #2d3748;
+}
+
+.tour-book-panel input:focus {
+  border-color: #3182ce;
+}
+
+/* Dynamic Summary Items */
+.tour-book-cart-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.tour-book-cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.tour-book-cart-item:last-of-type {
+  border-bottom: none;
+}
+
+.tour-book-item-details {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.tour-book-item-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #2d3748;
+}
+
+.tour-book-item-type {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tour-book-item-price {
+  font-weight: 700;
+  font-size: 14px;
+  color: #4a5568;
+}
+
+.tour-book-attendee-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ebf8ff;
+  color: #3182ce;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+/* Calculation Results Rows */
+.tour-book-totals-container {
+  margin-top: 20px;
+}
+
+.tour-book-totals-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #4a5568;
+  margin-top: 10px;
+}
+
+.tour-book-grand-total {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2d3748;
+  border-top: 2px solid #edf2f7;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+/* Submission Actions */
+.tour-book-submit-btn {
+  width: 100%;
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background 0.2s;
+  box-shadow: 0 2px 4px rgba(49, 130, 206, 0.3);
+  margin-top: 20px;
+}
+
+.tour-book-submit-btn:hover {
+  background-color: #2b6cb0;
+}
+
+.tour-book-submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* Confirmed Alert Banner */
+.tour-book-success-message {
+  background-color: #c6f6d5;
+  color: #22543d;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #9ae6b4;
+  margin-bottom: 20px;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
