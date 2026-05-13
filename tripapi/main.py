@@ -1,6 +1,6 @@
 # main.py
 import accommodation
-import activity_list_view  # --- NEW IMPORT ---
+import activity_list_view
 import adventure_list_view
 import bus_list_view
 import flight_booking_view
@@ -10,17 +10,20 @@ import flight_passenger_view
 import flight_seat_view
 import flight_summary_view
 import itinerary_view
+import local_tour
+import local_tour_book  # --- NEW IMPORT ---
+import local_tour_list
+import local_tour_view
 import rental_vehicle_view
 import taxi_list_view
 import train_list_view
-import local_tour
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 app = FastAPI(title="Travel Itinerary API")
 
-# Enable CORS for React frontend
+# Enable CORS for React frontend[cite: 6]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -29,7 +32,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Include Routers ---
+# --- Include Routers[cite: 6] ---
 app.include_router(itinerary_view.router)
 app.include_router(flight_booking_view.router)
 app.include_router(flight_list_view.router)
@@ -45,13 +48,17 @@ app.include_router(adventure_list_view.router)
 app.include_router(activity_list_view.router)
 app.include_router(accommodation.router)
 app.include_router(local_tour.router)
+app.include_router(local_tour_list.router)
+app.include_router(local_tour_view.router)
+app.include_router(local_tour_book.router)  # --- NEW ROUTER INCLUSION ---
 
-# --- Request Model for Search ---
+
+# --- Request Model for Search[cite: 6] ---
 class SearchRequest(BaseModel):
     query: str
 
 
-# --- Mock Data (Matching list_itinerary.html) ---
+# --- Mock Data (Matching list_itinerary.html)[cite: 6] ---
 MOCK_TRIPS = [
     {
         "id": "trip_001",
@@ -89,10 +96,10 @@ MOCK_TRIPS = [
 ]
 
 
-# --- Endpoint ---
+# --- Endpoint[cite: 6] ---
 @app.post("/trip/search")
 async def search_trips(request: SearchRequest):
     """
-    Returns the high-level list of itineraries.
+    Returns the high-level list of itineraries[cite: 6].
     """
     return MOCK_TRIPS
