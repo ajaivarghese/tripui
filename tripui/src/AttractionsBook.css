@@ -1,0 +1,237 @@
+/* --- GLOBAL STYLES --- */
+.attraction-book-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f0f4f8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2d3748;
+  padding-bottom: 60px;
+  box-sizing: border-box;
+}
+
+.attraction-book-iframe {
+  width: 100%;
+  height: 100vh;
+  border: none;
+  display: block;
+}
+
+/* Base mobile container logic streamlining sequential items */
+.attraction-book-wrapper .container { 
+  display: flex; 
+  flex-direction: column; 
+  padding: 20px 15px; 
+  max-width: 700px; 
+  margin: 0 auto; 
+  box-sizing: border-box;
+}
+
+.book-back-link {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: #718096;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.book-back-link:hover {
+  text-decoration: underline;
+}
+
+.attraction-book-wrapper h1 { 
+  color: #2d3748; 
+  margin-bottom: 5px; 
+  font-size: 24px; 
+}
+
+.attraction-book-wrapper .subtitle { 
+  color: #718096; 
+  margin-bottom: 25px; 
+  font-size: 15px; 
+}
+
+/* --- LAYOUT (Mobile First Base Flow) --- */
+.checkout-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* --- PANELS --- */
+.attraction-book-wrapper .panel {
+  background-color: #ffffff; 
+  border-radius: 16px; 
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
+  border: 1px solid #e2e8f0;
+  padding: 20px; 
+  box-sizing: border-box;
+}
+
+.attraction-book-wrapper .panel-title { 
+  font-size: 18px; 
+  font-weight: 700; 
+  color: #2d3748; 
+  margin-bottom: 20px; 
+  border-bottom: 2px solid #edf2f7; 
+  padding-bottom: 10px; 
+}
+
+/* --- FORM ELEMENTS (Stacked natively on mobile screens) --- */
+.attraction-book-wrapper .form-group { 
+  margin-bottom: 15px; 
+  width: 100%; 
+}
+
+.attraction-book-wrapper .form-row { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0; 
+}
+
+.attraction-book-wrapper label { 
+  display: block; 
+  font-size: 13px; 
+  font-weight: 600; 
+  color: #4a5568; 
+  margin-bottom: 6px; 
+}
+
+/* Inputs set strictly to 16px font configuration to block native auto-zooming on mobile viewports */
+.attraction-book-wrapper input[type="text"], 
+.attraction-book-wrapper input[type="email"], 
+.attraction-book-wrapper input[type="date"], 
+.attraction-book-wrapper input[type="number"] {
+  width: 100%; 
+  padding: 12px; 
+  font-size: 16px; 
+  border: 1px solid #e2e8f0; 
+  border-radius: 8px; 
+  outline: none; 
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+  box-sizing: border-box; 
+  transition: border-color 0.2s;
+}
+
+.attraction-book-wrapper input:focus { 
+  border-color: #718096; 
+}
+
+/* --- SUMMARY LIST --- */
+.attraction-book-wrapper .cart-item {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  padding: 12px 0; 
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.attraction-book-wrapper .cart-item:last-of-type { 
+  border-bottom: none; 
+}
+
+.attraction-book-wrapper .item-details { 
+  display: flex; 
+  flex-direction: column; 
+}
+
+.attraction-book-wrapper .item-title { 
+  font-weight: 600; 
+  font-size: 14px; 
+  color: #2d3748; 
+}
+
+.attraction-book-wrapper .item-type { 
+  font-size: 12px; 
+  color: #718096; 
+}
+
+.attraction-book-wrapper .item-price { 
+  font-weight: 700; 
+  font-size: 14px; 
+  color: #4a5568; 
+}
+
+.attraction-book-wrapper .totals-row {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  font-size: 14px; 
+  color: #4a5568; 
+  margin-top: 10px;
+}
+
+.attraction-book-wrapper .grand-total {
+  font-size: 18px; 
+  font-weight: 700; 
+  color: #2d3748;
+  border-top: 2px solid #edf2f7; 
+  padding-top: 15px; 
+  margin-top: 15px;
+}
+
+/* --- BUTTON --- */
+.attraction-book-wrapper .book-btn {
+  width: 100%; 
+  background-color: #2d3748; 
+  color: white; 
+  border: none;
+  padding: 16px; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-size: 16px; 
+  font-weight: 700;
+  transition: background 0.2s; 
+  box-shadow: 0 4px 6px rgba(45, 55, 72, 0.2);
+  margin-top: 20px;
+}
+
+.attraction-book-wrapper .book-btn:hover { 
+  background-color: #1a202c; 
+}
+
+.attraction-book-wrapper .book-btn:active { 
+  transform: scale(0.98); 
+}
+
+/* Success Message Overlay */
+.attraction-book-wrapper #success-message {
+  background-color: #c6f6d5; 
+  color: #22543d;
+  padding: 20px; 
+  border-radius: 8px; 
+  text-align: center; 
+  border: 1px solid #9ae6b4;
+  margin-bottom: 20px; 
+  font-weight: 600;
+}
+
+/* --- DESKTOP / TABLET ENHANCEMENTS --- */
+@media (min-width: 768px) {
+  .attraction-book-wrapper .container { 
+    padding: 40px 20px; 
+  }
+  
+  .attraction-book-wrapper h1 { 
+    font-size: 28px; 
+  }
+  
+  .attraction-book-wrapper .panel { 
+    padding: 25px; 
+  }
+  
+  /* Inner input components stretch outward horizontally to map inline layout rows smoothly */
+  .attraction-book-wrapper .form-row { 
+    flex-direction: row; 
+    gap: 15px; 
+  }
+  
+  .attraction-book-wrapper .form-row .form-group { 
+    flex: 1; 
+    margin-bottom: 15px; 
+  }
+}

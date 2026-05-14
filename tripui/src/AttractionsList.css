@@ -1,0 +1,273 @@
+.attractions-page-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f0f4f8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2d3748;
+}
+
+.attractions-nav-header {
+  padding: 15px 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.attractions-back-btn {
+  background: none;
+  border: none;
+  color: #3182ce;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.attractions-iframe-layer {
+  width: 100%;
+  height: calc(100vh - 55px);
+  border: none;
+  display: block;
+}
+
+.attractions-native-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.attractions-native-container h1 {
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+.attractions-subtitle {
+  color: #718096;
+  margin-bottom: 30px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.attractions-controls-wrapper {
+  width: 100%;
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.attractions-search-input {
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 50px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.attractions-filter-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+}
+
+.attractions-filter-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #cbd5e0;
+  background: white;
+  color: #4a5568;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.attractions-filter-btn.active {
+  background-color: #718096;
+  color: white;
+  border-color: #718096;
+}
+
+.attractions-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.attractions-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.attractions-img-container {
+  height: 180px;
+  background-color: #cbd5e0;
+  position: relative;
+  overflow: hidden;
+}
+
+.attractions-place-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.attractions-no-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #718096;
+  font-size: 14px;
+}
+
+.attractions-price-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.price-free { background-color: #48bb78; color: white; }
+.price-paid { background-color: #2d3748; color: white; }
+
+.attractions-type-badge {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background-color: #718096;
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.attractions-card-content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.attractions-place-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.attractions-place-desc {
+  font-size: 13px;
+  color: #718096;
+  margin-bottom: 15px;
+}
+
+.attractions-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  background-color: #f7fafc;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 12px;
+}
+
+.attractions-details-container {
+  border-top: 1px dashed #e2e8f0;
+  padding-top: 15px;
+  font-size: 13px;
+  color: #4a5568;
+}
+
+.attractions-detail-row {
+  margin-bottom: 12px;
+}
+
+.detail-label {
+  font-weight: 700;
+  color: #718096;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.attractions-detail-row-inline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.attractions-detail-row-inline .detail-label { display: inline; }
+
+.attractions-map-link {
+  display: inline-flex;
+  color: #4a5568;
+  font-weight: 600;
+  text-decoration: none;
+  background-color: #edf2f7;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e0;
+}
+
+.attractions-contact-link {
+  color: #3182ce;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 10px;
+}
+
+.attractions-card-footer {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+  padding-top: 15px;
+}
+
+.attractions-expand-btn, .attractions-add-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #cbd5e0;
+}
+
+.attractions-add-btn {
+  background-color: #718096;
+  color: white;
+  border: none;
+}
+
+.attractions-add-btn:disabled {
+  background-color: #cbd5e0;
+  cursor: not-allowed;
+}
+
+.attractions-no-results {
+  text-align: center;
+  color: #a0aec0;
+  margin-top: 40px;
+  width: 100%;
+}

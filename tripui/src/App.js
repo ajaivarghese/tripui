@@ -27,7 +27,9 @@ import AdventureList from './AdventureList';
 import ActivityList from './ActivityList';
 import AccommodationList from './AccommodationList';
 import LocalTourView from './LocalTourView';
-import LocalTourBook from './LocalTourBook'; // NEW COMPONENT IMPORT
+import LocalTourBook from './LocalTourBook';
+import AttractionsList from './AttractionsList'; 
+import AttractionsBook from './AttractionsBook'; // NEW IMPORT
 
 function App() {
   // ==========================================
@@ -39,7 +41,7 @@ function App() {
   const [itineraries, setItineraries] = useState([]);
   const [detailedViewData, setDetailedViewData] = useState(null); 
   
-  // Flight Booking Flow Data
+  // Flight Flow Data
   const [flightSearchConfig, setFlightSearchConfig] = useState(null); 
   const [flightResultsData, setFlightResultsData] = useState(null); 
   const [selectedFlightData, setSelectedFlightData] = useState(null); 
@@ -50,7 +52,7 @@ function App() {
   const [summaryData, setSummaryData] = useState(null);
   const [confirmationData, setConfirmationData] = useState(null);
 
-  // Surface Transport Flow Data
+  // Transport Flow Data
   const [trainListData, setTrainListData] = useState(null);
   const [busListData, setBusListData] = useState(null); 
   const [taxiListData, setTaxiListData] = useState(null); 
@@ -60,9 +62,12 @@ function App() {
   // Experience Flow Data
   const [adventureData, setAdventureData] = useState(null);
   const [activityData, setActivityData] = useState(null);
+  const [attractionData, setAttractionData] = useState(null); 
+  const [attractionBookHtml, setAttractionBookHtml] = useState(null); // NEW BOOKING TARGET HTML
+  const [selectedAttractionItem, setSelectedAttractionItem] = useState(null); // TARGET ITEM STATE
   const [localTourData, setLocalTourData] = useState(null);
   const [detailedTourViewData, setDetailedTourViewData] = useState(null);
-  const [bookTourHtmlData, setBookTourHtmlData] = useState(null); // BOOKING STATE DATA
+  const [bookTourHtmlData, setBookTourHtmlData] = useState(null); 
 
   // Loading States
   const [isLoading, setIsLoading] = useState(false);
@@ -115,7 +120,6 @@ function App() {
     }
   };
 
-  // Local tour extraction view handler
   const fetchDetailedLocalTourView = async (tourId, tourTitle) => {
     setIsDetailsLoading(true);
     try {
@@ -136,7 +140,6 @@ function App() {
     }
   };
 
-  // NEW HANDLER: Triggers when the user clicks 'Book Now' inside the Tour View
   const handleInitiateLocalTourBooking = async (tourDetailsPayload) => {
     setIsDetailsLoading(true);
     try {
@@ -146,7 +149,6 @@ function App() {
         body: JSON.stringify({ tour: tourDetailsPayload })
       });
       
-      // Captures the contents of local_tours_book.html returned by backend
       const rawHtmlContent = await response.text();
       setBookTourHtmlData(rawHtmlContent);
       setCurrentView('localTourBook');
@@ -200,62 +202,51 @@ function App() {
         </div>
       )}
       
-      {/* 1. Trip List */}
       {!isDetailsLoading && currentView === 'home' && itineraries.length > 0 && (
-        <ItineraryList 
-          itineraries={itineraries} 
-          onViewDetails={fetchItineraryDetails} 
-        />
+        <ItineraryList itineraries={itineraries} onViewDetails={fetchItineraryDetails} />
       )}
 
-      {/* 2. Trip Timeline */}
       {!isDetailsLoading && currentView === 'timeline' && detailedViewData && (
         <ItineraryTimeline 
           timelineData={detailedViewData} 
           onBack={handleBackToHome} 
-          onShowFlightSearch={(configData) => {
-            setFlightSearchConfig(configData);
-            setCurrentView('flightBooking');
-          }}
-          onShowTrainList={(trainData) => {
-            setTrainListData(trainData);
-            setCurrentView('trainList');
-          }}
-          onShowBusList={(busData) => {
-            setBusListData(busData);
-            setCurrentView('busList');
-          }}
-          onShowTaxiList={(taxiData) => {
-            setTaxiListData(taxiData);
-            setCurrentView('taxiList');
-          }}
-          onShowRentalList={(rentalData) => {
-            setRentalListData(rentalData);
-            setCurrentView('rentalList');
-          }}
-          onShowMultiList={(multiData) => {
-            setMultiTransportData(multiData);
-            setCurrentView('multiTransportList');
-          }}
-          onShowAdventureList={(advData) => {
-            setAdventureData(advData);
-            setCurrentView('adventureList');
-          }}
-          onShowActivityList={(actData) => {
-            setActivityData(actData);
-            setCurrentView('activityList'); 
-          }}
-          onShowAccommodationList={() => {
-            setCurrentView('accommodationList');
-          }}
-          onShowLocalTourList={(localTourData) => {
-            setLocalTourData(localTourData);
-            setCurrentView('localTourList'); 
-          }}          
+          onShowFlightSearch={(configData) => { setFlightSearchConfig(configData); setCurrentView('flightBooking'); }}
+          onShowTrainList={(trainData) => { setTrainListData(trainData); setCurrentView('trainList'); }}
+          onShowBusList={(busData) => { setBusListData(busData); setCurrentView('busList'); }}
+          onShowTaxiList={(taxiData) => { setTaxiListData(taxiData); setCurrentView('taxiList'); }}
+          onShowRentalList={(rentalData) => { setRentalListData(rentalData); setCurrentView('rentalList'); }}
+          onShowMultiList={(multiData) => { setMultiTransportData(multiData); setCurrentView('multiTransportList'); }}
+          onShowAdventureList={(advData) => { setAdventureData(advData); setCurrentView('adventureList'); }}
+          onShowActivityList={(actData) => { setActivityData(actData); setCurrentView('activityList'); }}
+          onShowAttractionList={(attrData) => { setAttractionData(attrData); setCurrentView('attractionsList'); }}
+          onShowAccommodationList={() => setCurrentView('accommodationList')}
+          onShowLocalTourList={(localTourData) => { setLocalTourData(localTourData); setCurrentView('localTourList'); }}          
         />
       )}
 
-      {/* --- Flight Views --- */}
+      {/* --- Attractions Views --- */}
+      {!isDetailsLoading && currentView === 'attractionsList' && (
+        <AttractionsList 
+          htmlContent={attractionData} 
+          onBack={() => setCurrentView('timeline')}
+          onBookAttraction={(bookHtmlString, targetActivity) => {
+            setAttractionBookHtml(bookHtmlString);
+            setSelectedAttractionItem(targetActivity);
+            setCurrentView('attractionsBook');
+          }}
+        />
+      )}
+
+      {/* NEW CHECKOUT COMPONENT RENDER */}
+      {!isDetailsLoading && currentView === 'attractionsBook' && (
+        <AttractionsBook 
+          htmlContent={attractionBookHtml}
+          targetItem={selectedAttractionItem}
+          onBack={() => setCurrentView('attractionsList')}
+        />
+      )}
+
+      {/* --- Rest of Sub-view Render Handlers --- */}
       {!isDetailsLoading && currentView === 'flightBooking' && (
         <FlightBooking searchConfig={flightSearchConfig} onBack={() => setCurrentView('timeline')} onShowResults={(resultsData) => { setFlightResultsData(resultsData); setCurrentView('flightResults'); }} />
       )}
@@ -278,64 +269,24 @@ function App() {
         <FlightConfirmation confirmationData={confirmationData} summaryData={summaryData} onHome={() => { setDetailedViewData(null); setCurrentView('home'); }} />
       )}
 
-      {/* --- Surface Transport Views --- */}
-      {!isDetailsLoading && currentView === 'trainList' && (
-        <TrainListMulti trainData={trainListData} onBack={() => setCurrentView('timeline')} onSelectTrain={(train, selectedClass) => { alert(`You selected ${train.name} (${selectedClass.name}).`); }} />
-      )}
-      {!isDetailsLoading && currentView === 'busList' && (
-        <BusListMulti busData={busListData} onBack={() => setCurrentView('timeline')} onSelectBus={(bus) => { alert(`You selected the ${bus.operator} bus.`); }} />
-      )}
-      {!isDetailsLoading && currentView === 'taxiList' && (
-        <TaxiListMulti taxiData={taxiListData} onBack={() => setCurrentView('timeline')} onSelectTaxi={(taxi) => { alert(`You selected a ${taxi.type} from ${taxi.provider}.`); }} />
-      )}
-      {!isDetailsLoading && currentView === 'rentalList' && (
-        <RentalBooking rentalData={rentalListData} onBack={() => setCurrentView('timeline')} />
-      )}
-      {!isDetailsLoading && currentView === 'multiTransportList' && (
-        <MultiTransportList transportData={multiTransportData} onBack={() => setCurrentView('timeline')} />
-      )}
+      {!isDetailsLoading && currentView === 'trainList' && <TrainListMulti trainData={trainListData} onBack={() => setCurrentView('timeline')} />}
+      {!isDetailsLoading && currentView === 'busList' && <BusListMulti busData={busListData} onBack={() => setCurrentView('timeline')} />}
+      {!isDetailsLoading && currentView === 'taxiList' && <TaxiListMulti taxiData={taxiListData} onBack={() => setCurrentView('timeline')} />}
+      {!isDetailsLoading && currentView === 'rentalList' && <RentalBooking rentalData={rentalListData} onBack={() => setCurrentView('timeline')} />}
+      {!isDetailsLoading && currentView === 'multiTransportList' && <MultiTransportList transportData={multiTransportData} onBack={() => setCurrentView('timeline')} />}
+      {!isDetailsLoading && currentView === 'adventureList' && <AdventureList htmlContent={adventureData} onBack={() => setCurrentView('timeline')} />}
+      {!isDetailsLoading && currentView === 'activityList' && <ActivityList htmlContent={activityData} onBack={() => setCurrentView('timeline')} />}
+      {!isDetailsLoading && currentView === 'accommodationList' && <AccommodationList onBack={() => setCurrentView('timeline')} />}
 
-      {/* --- Experience Views --- */}
-      {!isDetailsLoading && currentView === 'adventureList' && (
-        <AdventureList htmlContent={adventureData} onBack={() => setCurrentView('timeline')} />
-      )}
-      
-      {!isDetailsLoading && currentView === 'activityList' && (
-        <ActivityList htmlContent={activityData} onBack={() => setCurrentView('timeline')} />
-      )}
-
-      {/* --- Accommodation Views --- */}
-      {!isDetailsLoading && currentView === 'accommodationList' && (
-        <AccommodationList onBack={() => setCurrentView('timeline')} />
-      )}
-
-      {/* --- LocalTour Screens Chain --- */}
       {!isDetailsLoading && currentView === 'localTourList' && (
-        <LocalToursList 
-          tourData={localTourData}
-          onBack={() => setCurrentView('timeline')} 
-          onClose={() => setCurrentView('timeline')}
-          onViewTourDetails={fetchDetailedLocalTourView}
-        />
+        <LocalToursList tourData={localTourData} onBack={() => setCurrentView('timeline')} onClose={() => setCurrentView('timeline')} onViewTourDetails={fetchDetailedLocalTourView} />
       )}
-
-      {/* Parent Tour Detail Screen */}
       {!isDetailsLoading && currentView === 'localTourView' && (
-        <LocalTourView 
-          htmlContent={detailedTourViewData} 
-          onBack={() => setCurrentView('localTourList')}
-          onBookNow={handleInitiateLocalTourBooking}
-        />
+        <LocalTourView htmlContent={detailedTourViewData} onBack={() => setCurrentView('localTourList')} onBookNow={handleInitiateLocalTourBooking} />
       )}
-
-      {/* Checkout Booking Screen (NEW) */}
       {!isDetailsLoading && currentView === 'localTourBook' && (
-        <LocalTourBook 
-          htmlContent={bookTourHtmlData} 
-          onBack={() => setCurrentView('localTourView')}
-        />
+        <LocalTourBook htmlContent={bookTourHtmlData} onBack={() => setCurrentView('localTourView')} />
       )}
-
     </div>
   );
 }

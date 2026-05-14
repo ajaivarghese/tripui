@@ -14,7 +14,8 @@ const ItineraryTimeline = ({
   onShowAdventureList,
   onShowActivityList,
   onShowAccommodationList,
-  onShowLocalTourList
+  onShowLocalTourList,
+  onShowAttractionList // Added new prop callback
 }) => {
   const [expandedDays, setExpandedDays] = useState(
     timelineData ? timelineData.reduce((acc, day) => ({ ...acc, [day.dayId]: true }), {}) : {}
@@ -42,6 +43,7 @@ const ItineraryTimeline = ({
     const isAdventure = event.tagLabel && event.tagLabel.toLowerCase().includes('adventure');
     const isActivity = event.tagLabel && event.tagLabel.toLowerCase().includes('activity');
     const isLocalTour = event.tagLabel && event.tagLabel.toLowerCase().includes('local tour');
+    const isAttraction = event.tagLabel && event.tagLabel.toLowerCase().includes('attraction'); // Added Attraction detection
     
     // Check if the event card represents a stay/accommodation
     const isAccommodation = event.tagLabel?.toLowerCase().includes('stay') || 
@@ -191,7 +193,6 @@ const ItineraryTimeline = ({
         setLoadingEventId(null);
       }      
     } else if (isAccommodation) {
-      // --- ROUTE TO ACCOMMODATION COMPONENT ---
       if (onShowAccommodationList) onShowAccommodationList();
     } else if (isLocalTour) {
       setLoadingEventId(event.id || event.title);
@@ -212,6 +213,26 @@ const ItineraryTimeline = ({
       } finally {
         setLoadingEventId(null);
       }      
+    } else if (isAttraction) {
+      // API call block for Attraction tag handling
+      setLoadingEventId(event.id || event.title);
+      try {
+        const response = await fetch('https://cuddly-fortnight-4w4xx4vwwwrh4qj-8000.app.github.dev/trip/attractions/list', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventId: event.id, title: event.title })
+        });
+        
+        const attractionHtml = await response.text();
+
+        if (onShowAttractionList) onShowAttractionList(attractionHtml);
+      } catch (error) {
+        console.error("Error initiating attraction search:", error);
+        alert("Failed to reach attraction list API.");
+        if (onShowAttractionList) onShowAttractionList(null); 
+      } finally {
+        setLoadingEventId(null);
+      }
     } else {
       if (onEventClick) onEventClick(event);
     }

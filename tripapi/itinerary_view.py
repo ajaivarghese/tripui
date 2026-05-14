@@ -38,8 +38,8 @@ MOCK_ITINERARY_DETAILS = {
                     "time": "05:30 PM",
                     "icon": "📸",
                     "title": "City Tour (3 Stops)",
-                    "tagClass": "tag-tours",
-                    "tagLabel": "Tours",
+                    "tagClass": "tag-attractions",
+                    "tagLabel": "Attractions",
                     "details": "<ul class='activity-list'><li>Walk through the Royal Botanical Gardens</li><li>Photo op at the Palace Gates</li><li>Evening tea at the Historic Square</li></ul>",
                 },
                 {

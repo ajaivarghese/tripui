@@ -2,6 +2,8 @@
 import accommodation
 import activity_list_view
 import adventure_list_view
+import attraction_book_view  # --- NEW IMPORT ---
+import attraction_list_view
 import bus_list_view
 import flight_booking_view
 import flight_list_view
@@ -11,7 +13,7 @@ import flight_seat_view
 import flight_summary_view
 import itinerary_view
 import local_tour
-import local_tour_book  # --- NEW IMPORT ---
+import local_tour_book
 import local_tour_list
 import local_tour_view
 import rental_vehicle_view
@@ -46,11 +48,13 @@ app.include_router(taxi_list_view.router)
 app.include_router(rental_vehicle_view.router)
 app.include_router(adventure_list_view.router)
 app.include_router(activity_list_view.router)
+app.include_router(attraction_list_view.router)
+app.include_router(attraction_book_view.router)  # --- NEW ROUTER INCLUSION ---
 app.include_router(accommodation.router)
 app.include_router(local_tour.router)
 app.include_router(local_tour_list.router)
 app.include_router(local_tour_view.router)
-app.include_router(local_tour_book.router)  # --- NEW ROUTER INCLUSION ---
+app.include_router(local_tour_book.router)
 
 
 # --- Request Model for Search[cite: 6] ---
